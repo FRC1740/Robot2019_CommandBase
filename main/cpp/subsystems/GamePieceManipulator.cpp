@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------*/
+/*----------------------------------m_gamePieceCommand->Start();------------------------------------------*/
 /* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
@@ -14,8 +14,8 @@ constexpr double hingeMinLeft  = 4.7; // was 0.3;
 constexpr double hingeMaxRight = 0.8; // was 4.3;
 constexpr double hingeMinRight = 4.8; // was 0.538;
 constexpr double hingeLeftKp   = 1.0;
-constexpr double hingeLeftKi   = 0.0;
-constexpr double hingeLeftKd   = 0.0;
+constexpr double hingeLeftKi   = 0.05;
+constexpr double hingeLeftKd   = 0.75;
 constexpr double hingeRightKp  = hingeLeftKp;
 constexpr double hingeRightKi  = hingeLeftKi;
 constexpr double hingeRightKd  = hingeLeftKd;
@@ -107,7 +107,7 @@ void GamePieceManipulator::Move(double v) {
     if ((v > GP_DEADBAND && positionR > HINGE_MIN_RIGHT)
         || (v < -GP_DEADBAND && positionR < HINGE_MAX_RIGHT)) {
         //v *= 10.0;
-        hingeMotorR->Set(v*.91);
+        hingeMotorR->Set(v);
     }
     else {
         hingeMotorR->Set(0.0);
@@ -174,7 +174,7 @@ HingePIDOutput::HingePIDOutput(WPI_TalonSRX *motor, frc::AnalogInput *pot,
 void HingePIDOutput::PIDWrite(double d) {
   double v = m_pot->GetVoltage();
   v = (v - m_min) / m_range;
-  if ((v < 0.0) || (v > 1.0)) {
+  if (((v < 0.0) && (d < 0.0)) || ((v > 1.0) && (d > 0.0))) {
     // Software limit switch
     m_motor->Set(0.0);
   }

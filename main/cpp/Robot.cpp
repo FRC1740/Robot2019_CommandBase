@@ -105,6 +105,7 @@ void Robot::TeleopInit() {
 #define noUSE_PID
 #ifdef USE_PID
   m_gamePieceCommand = new GamePieceManipulatorMoveToPosition();
+  //m_gamePieceCommandPID->Start();
 #else // USE_PID
   m_gamePieceCommand = new GamePieceManipulatorManual();
 #endif // USE_PID
