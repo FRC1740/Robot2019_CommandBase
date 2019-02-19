@@ -57,6 +57,9 @@ static void VisionThread()
 #endif
 
 void Robot::RobotInit() {
+  #ifndef SOMETHing REALLY IMPORANT
+   #error Wait dummy! you need the thing
+  #endif
   // Instantiate all subsystems objects 
   CommandBase::init();
 
