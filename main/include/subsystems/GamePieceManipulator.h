@@ -16,8 +16,8 @@
 #include <frc/AnalogInput.h>
 
 // Max and min voltage for hinge pot positions
-#define HINGE_MAX_LEFT 4.7
-#define HINGE_MIN_LEFT .7
+#define HINGE_MAX_LEFT 4.3
+#define HINGE_MIN_LEFT .45
 #define HINGE_MAX_RIGHT 4.95
 #define HINGE_MIN_RIGHT 0.3
 // Top: 4.7V Bottom: 1.2V (3.5V = 90 degrees)
