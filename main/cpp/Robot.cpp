@@ -13,21 +13,65 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/shuffleboard/Shuffleboard.h>
 
+// Following four lines for vision processing
+#include "vision/VisionPipeline.h"
+#include "vision/VisionRunner.h"
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/core/core.hpp>
+
 ExampleSubsystem Robot::m_subsystem;
 //OI Robot::m_oi;
+
+#define no_RAW_CAMERA
+#ifndef RAW_CAMERA
+
+static void VisionThread()
+{
+    cs::UsbCamera camera = CameraServer::GetInstance()->StartAutomaticCapture();
+    camera.SetExposureManual(25);
+    camera.SetFPS(15);
+    camera.SetResolution(640, 480);
+    cs::CvSink cvSink = CameraServer::GetInstance()->GetVideo();
+    cs::CvSource outputStreamStd = CameraServer::GetInstance()->PutVideo("Gray", 640, 480);
+    cv::Mat source;
+    cv::Mat output;
+    cv::Mat mask;
+    std::vector<std::vector<cv::Point>> contours;
+    std::vector<cv::Vec4i> hierarchy;
+
+    while(true) {
+        cvSink.GrabFrame(source);
+        cvSink.GrabFrame(mask);
+        if (!source.empty()) {
+          cvtColor(source, output, cv::COLOR_BGR2GRAY);
+//          cvtColor(source, output, cv::COLOR_BGR2HSV);
+          inRange(output, cv::Scalar(128, 128, 128), cv::Scalar(255, 255, 255), mask);
+          findContours(mask, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0,0));
+        }
+        else {
+          cvSink.GrabFrame(output);
+        }
+        outputStreamStd.PutFrame(mask);
+    }
+}
+#endif
 
 void Robot::RobotInit() {
   // Instantiate all subsystems objects 
   CommandBase::init();
 
+// Launch vision thread
+  std::thread visionThread(VisionThread);
+  visionThread.detach();
+
+#ifdef RAW_CAMERA
   cs::UsbCamera camera1 = CameraServer::GetInstance()->StartAutomaticCapture(1);
   cs::UsbCamera camera0 = CameraServer::GetInstance()->StartAutomaticCapture(0);
-	camera1.SetResolution(640, 480);
+  camera1.SetResolution(640, 480);
   camera0.SetResolution(640, 480);
-  //camera1.SetExposureHoldCurrent();
-  camera1.SetBrightness(50);
   camera1.SetExposureManual(35);
   camera0.SetExposureManual(35);
+#endif
 
   m_chooser.SetDefaultOption("Default Auto", &m_defaultAuto);
   m_chooser.AddOption("My Auto", &m_myAuto);
