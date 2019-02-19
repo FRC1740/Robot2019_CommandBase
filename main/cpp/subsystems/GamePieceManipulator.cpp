@@ -9,16 +9,16 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 // Move these to the appropriate location
-constexpr double hingeMaxLeft = 0.7; // was 4.3; measured on Armada
-constexpr double hingeMinLeft = 4.7; // was 0.3;
+constexpr double hingeMaxLeft  = 0.7; // was 4.3; measured on Armada
+constexpr double hingeMinLeft  = 4.7; // was 0.3;
 constexpr double hingeMaxRight = 0.8; // was 4.3;
 constexpr double hingeMinRight = 4.8; // was 0.538;
-constexpr double hingeLeftKp = 1.0;
-constexpr double hingeLeftKi = 0.0;
-constexpr double hingeLeftKd = 0.0;
-constexpr double hingeRightKp = 1.0;
-constexpr double hingeRightKi = 0.0;
-constexpr double hingeRightKd = 0.0;
+constexpr double hingeLeftKp   = 1.0;
+constexpr double hingeLeftKi   = 0.0;
+constexpr double hingeLeftKd   = 0.0;
+constexpr double hingeRightKp  = hingeLeftKp;
+constexpr double hingeRightKi  = hingeLeftKi;
+constexpr double hingeRightKd  = hingeLeftKd;
 
 GamePieceManipulator::GamePieceManipulator() : frc::Subsystem("GamePieceManipulator") {
 
@@ -29,6 +29,9 @@ GamePieceManipulator::GamePieceManipulator() : frc::Subsystem("GamePieceManipula
   // Hinge Raise/Lower Motor
   hingeMotorL = new WPI_TalonSRX(6); // CAN ID
   hingeMotorR = new WPI_TalonSRX(7); // CAN ID
+  hingeMotorL->EnableCurrentLimit(true);
+  hingeMotorR->EnableCurrentLimit(true);
+
   hingePotL = new frc::AnalogInput(0);
   hingePotR = new frc::AnalogInput(1);
   hingePotL->SetOversampleBits(4);
@@ -53,8 +56,10 @@ GamePieceManipulator::GamePieceManipulator() : frc::Subsystem("GamePieceManipula
     *hingeInL, *hingeOutL);
   hingePIDR = new frc::PIDController(hingeRightKp, hingeRightKi, hingeRightKd,
     *hingeInR, *hingeOutR);
+  frc::SmartDashboard::PutData("Hinge PID Left", hingePIDL);
+  frc::SmartDashboard::PutData("Minge PID Right", hingePIDR);
   
-  hingePIDL->SetInputRange(0.0, 1.0);  // [120,0] (here::MoveTo) <- [0,1] (PID) <- [0.7,4.7] (here)
+  hingePIDL->SetInputRange(0.0, 1.0);  // [120,0] (here::MoveTo) <- [0,1] (PID) <- [4.7,0.7] (here)
   hingePIDL->SetOutputRange(-1.0, 1.0);  // velocity
   hingePIDR->SetInputRange(0.0, 1.0);
   hingePIDR->SetOutputRange(-1.0, 1.0);
@@ -128,8 +133,8 @@ void GamePieceManipulator::DisablePIDLoop() {
 
 void GamePieceManipulator::Stop() {
     DisablePIDLoop();
-    hingeMotorL->Set(0.0);
-    hingeMotorR->Set(0.0);
+    //hingeMotorL->Set(0.0); redundant
+    //hingeMotorR->Set(0.0);
 }
 
 
@@ -170,6 +175,7 @@ void HingePIDOutput::PIDWrite(double d) {
   double v = m_pot->GetVoltage();
   v = (v - m_min) / m_range;
   if ((v < 0.0) || (v > 1.0)) {
+    // Software limit switch
     m_motor->Set(0.0);
   }
   else {

@@ -59,6 +59,7 @@ class Robot : public frc::TimedRobot {
   frc::Command* m_autonomousCommand = nullptr;
 	frc::Command *m_teleopCommand = nullptr;
   frc::Command *m_gamePieceCommand = nullptr;
+  frc::Command *m_gamePieceCommandPID = nullptr;
   frc::Command *m_habClimbCommand = nullptr;
   ExampleCommand m_defaultAuto;
   MyAutoCommand m_myAuto;

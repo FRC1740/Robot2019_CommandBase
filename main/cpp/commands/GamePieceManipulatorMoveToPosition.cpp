@@ -18,6 +18,7 @@ constexpr double posDeliverShip   =  90.0; // F
 constexpr double posPartialStow   = 100.0; // G
 
 double degToLinear(double degree) {
+  // Testing shows the relationship is relatively linear
   double d = 1.0 - (degree / 120.0);
   return d;
 }
@@ -60,7 +61,6 @@ void GamePieceManipulatorMoveToPosition::Execute() {
     newSetpoint = degToLinear(posGround);
   }
   if (newSetpoint != m_setpoint) {
-    printf("MoveToPosition");
     frc::SmartDashboard::PutNumber("Hatch Move to Position", newSetpoint);
     gamePieceManipulator->MoveTo(newSetpoint);
     m_setpoint = newSetpoint;
