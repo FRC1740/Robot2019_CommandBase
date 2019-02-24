@@ -1,4 +1,4 @@
-/*----------------------------------m_gamePieceCommand->Start();------------------------------------------*/
+/*----------------------------------------------------------------------------*/
 /* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
@@ -8,11 +8,20 @@
 #include "subsystems/GamePieceManipulator.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 
-// Move these to the appropriate location
-constexpr double hingeMaxLeft  = 0.7; // was 4.3; measured on Armada
-constexpr double hingeMinLeft  = 4.7; // was 0.3;
-constexpr double hingeMaxRight = 0.8; // was 4.3;
-constexpr double hingeMinRight = 4.8; // was 0.538;
+// Max and min voltage for hinge pot positions
+// Used by manual mode
+#define HINGE_MAX_LEFT   0.45  // 4.3
+#define HINGE_MIN_LEFT   4.3   // .45
+#define HINGE_MAX_RIGHT  0.3   // 4.95
+#define HINGE_MIN_RIGHT  4.95  // 0.3
+#define HINGE_RANGE_LEFT (HINGE_MAX_LEFT - HINGE_MIN_LEFT)
+#define HINGE_RANGE_RIGHT (HINGE_MAX_RIGHT - HINGE_MIN_RIGHT)
+
+// Used by PID mode
+constexpr double hingeMaxLeft  = 0.7;
+constexpr double hingeMinLeft  = 4.7;
+constexpr double hingeMaxRight = 0.8;
+constexpr double hingeMinRight = 4.8;
 constexpr double hingeLeftKp   = 1.0;
 constexpr double hingeLeftKi   = 0.05;
 constexpr double hingeLeftKd   = 0.75;
@@ -59,7 +68,7 @@ GamePieceManipulator::GamePieceManipulator() : frc::Subsystem("GamePieceManipula
   frc::SmartDashboard::PutData("Hinge PID Left", hingePIDL);
   frc::SmartDashboard::PutData("Minge PID Right", hingePIDR);
   
-  hingePIDL->SetInputRange(0.0, 1.0);  // [120,0] (here::MoveTo) <- [0,1] (PID) <- [4.7,0.7] (here)
+  hingePIDL->SetInputRange(0.0, 1.0);  // position [0,1] (PID) <- [4.7,0.7]
   hingePIDL->SetOutputRange(-1.0, 1.0);  // velocity
   hingePIDR->SetInputRange(0.0, 1.0);
   hingePIDR->SetOutputRange(-1.0, 1.0);
@@ -92,25 +101,25 @@ void GamePieceManipulator::HatchInject() {
 void GamePieceManipulator::Move(double v) {
  
     double positionL = hingePotL->GetVoltage();
-
-    if ((v > GP_DEADBAND && positionL > HINGE_MIN_LEFT)
-        || (v < -GP_DEADBAND && positionL < HINGE_MAX_LEFT)) {
-        //v *= 10.0;
-        hingeMotorL->Set(v);
+    // Scale positionL to [0, 1]
+    positionL = (positionL - HINGE_MIN_LEFT) / HINGE_RANGE_LEFT;
+    if ((v > GP_DEADBAND && positionL < 1.0)
+      || (v < -GP_DEADBAND && positionL > 0.0)) {
+      hingeMotorL->Set(v);
     }
     else {
-        hingeMotorL->Set(0.0);
+      hingeMotorL->Set(0.0);
     }
 
     double positionR = hingePotR->GetVoltage();
-
-    if ((v > GP_DEADBAND && positionR > HINGE_MIN_RIGHT)
-        || (v < -GP_DEADBAND && positionR < HINGE_MAX_RIGHT)) {
-        //v *= 10.0;
-        hingeMotorR->Set(v);
+    // Scale positionR to [0, 1]
+    positionR = (positionR - HINGE_MIN_RIGHT) / HINGE_RANGE_RIGHT;
+    if ((v > GP_DEADBAND && positionR < 1.0)
+      || (v < -GP_DEADBAND && positionR > 0.0)) {
+      hingeMotorR->Set(v);
     }
     else {
-        hingeMotorR->Set(0.0);
+      hingeMotorR->Set(0.0);
     }
 }
 
@@ -133,10 +142,7 @@ void GamePieceManipulator::DisablePIDLoop() {
 
 void GamePieceManipulator::Stop() {
     DisablePIDLoop();
-    //hingeMotorL->Set(0.0); redundant
-    //hingeMotorR->Set(0.0);
 }
-
 
 double GamePieceManipulator::GetLPosition() {
     return hingePotL->GetVoltage();
