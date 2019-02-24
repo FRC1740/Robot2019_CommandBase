@@ -36,22 +36,40 @@ static void VisionThread()
     cv::Mat source;
     cv::Mat output;
     cv::Mat mask;
+    cv::Mat draw;
     std::vector<std::vector<cv::Point>> contours;
     std::vector<cv::Vec4i> hierarchy;
 
     while(true) {
         cvSink.GrabFrame(source);
         cvSink.GrabFrame(mask);
+        cvSink.GrabFrame(draw);
         if (!source.empty()) {
           cvtColor(source, output, cv::COLOR_BGR2GRAY);
 //          cvtColor(source, output, cv::COLOR_BGR2HSV);
           inRange(output, cv::Scalar(128, 128, 128), cv::Scalar(255, 255, 255), mask);
           findContours(mask, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0,0));
+          if (contours.size() <= 2) { // Abort if too many targets!
+            double avgCenterX=0;
+            double avgCenterY=0;
+            for (size_t i=0; i<contours.size(); i++) {      
+              drawContours(draw, contours, i, cv::Scalar(255, 0, 255), 3, 8, hierarchy, 0, cv::Point() );
+              cv::Rect boundRect = boundingRect(contours[i]);
+              rectangle(draw, boundRect, cv::Scalar(0, 255, 255), 3, 8, 0);
+              double centerX = boundRect.x + (boundRect.width / 2);
+              double centerY = boundRect.y + (boundRect.height / 2);
+              avgCenterX += centerX;
+              avgCenterY += centerY;
+              }
+            avgCenterX /= contours.size();
+            avgCenterY /= contours.size();
+            circle(draw, cv::Point(avgCenterX, avgCenterY), 5, cv::Scalar(250, 250, 0), 3, 8, 0);
+          }
         }
         else {
           cvSink.GrabFrame(output);
         }
-        outputStreamStd.PutFrame(mask);
+        outputStreamStd.PutFrame(draw);
     }
 }
 #endif
