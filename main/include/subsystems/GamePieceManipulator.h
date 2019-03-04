@@ -14,6 +14,8 @@
 #include <frc/DoubleSolenoid.h>
 #include <ctre/Phoenix.h>
 #include <frc/AnalogInput.h>
+#include <frc/DigitalInput.h>
+
 
 // Forward declarations
 class HingePIDSource;
@@ -42,6 +44,7 @@ class GamePieceManipulator : public frc::Subsystem {
   HingePIDOutput *hingeOutR;
   frc::PIDController *hingePIDL;
   frc::PIDController *hingePIDR;
+  frc::DigitalInput *ballIntakeLimit;
 
  public:
   GamePieceManipulator();
