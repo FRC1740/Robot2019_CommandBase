@@ -20,11 +20,18 @@ void MecanumDriveCommand::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void MecanumDriveCommand::Execute() {
+  if (oi->m_XboxDriver->GetYButtonPressed()) {
+      CommandBase::visionEnabled = true;
+      mecanumDriveSystem->Go(0, 0.1 * CommandBase::visionOffset, 0);
+  }
+  else {
+  CommandBase::visionEnabled = false;
   if (useGyro) {
     mecanumDriveSystem->Saucer(this->GetX(), this->GetInvertedY(), this->GetTwist());
   }
   else {
     mecanumDriveSystem->Go(this->GetX(), this->GetInvertedY(), this->GetTwist());
+  }
   }
 }
 
