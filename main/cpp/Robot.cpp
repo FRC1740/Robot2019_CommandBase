@@ -71,14 +71,18 @@ static void VisionThread()
           }
         }
         else {
-          cvSink.GrabFrame(output);
+          cvSink.GrabFrame(draw);
+        }
+        if (!draw.empty()) {
+          outputStreamStd.PutFrame(draw);
         }
       } //visionEnabled
       else {
-        outputStreamStd.PutFrame(source);
+        if (!source.empty()) {
+          outputStreamStd.PutFrame(source);
+        }
       }
     }
-  }
 }
 #endif
 
