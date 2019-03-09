@@ -32,18 +32,12 @@ GamePieceManipulatorMoveToPosition::GamePieceManipulatorMoveToPosition() {
 // Called just before this Command runs the first time
 void GamePieceManipulatorMoveToPosition::Initialize() {
   m_setpoint = posStow;
-  //gamePieceManipulator->EnablePIDLoop();  // Enable this after PID is working
 }
 
 // Called repeatedly when this Command is scheduled to run
 void GamePieceManipulatorMoveToPosition::Execute() {
-  /*
-  from driver_x, driver_y, codriver_x, codriver_y get named position
-  if named position is different from saved
-    set setpoint
-  save setpoint
-  */
   double newSetpoint = m_setpoint;
+
   if (oi->m_XboxDriver->GetAButtonPressed()) {
     gamePieceManipulator->Stop();
     return;
@@ -60,6 +54,7 @@ void GamePieceManipulatorMoveToPosition::Execute() {
   else if (oi->m_XboxDriver->GetYButtonPressed()) { // was CoDriver
     newSetpoint = degToLinear(posGround);
   }
+
   if (newSetpoint != m_setpoint) {
     frc::SmartDashboard::PutNumber("Hatch Move to Position", newSetpoint);
     gamePieceManipulator->MoveTo(newSetpoint);

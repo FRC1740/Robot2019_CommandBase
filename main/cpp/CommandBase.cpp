@@ -7,6 +7,8 @@ MecanumDriveSystem* CommandBase::mecanumDriveSystem = NULL;
 GamePieceManipulator* CommandBase::gamePieceManipulator = NULL;
 HABClimber* CommandBase::habClimber = NULL;
 Utility* CommandBase::utility = NULL;
+double CommandBase::visionOffset = 0.0;
+bool CommandBase::visionEnabled = false;
 
 CommandBase::CommandBase(char const *name): frc::Command(name) {}
 

@@ -41,7 +41,9 @@ static void VisionThread()
     std::vector<cv::Vec4i> hierarchy;
 
     while(true) {
+      //frc::SmartDashboard::PutBoolean("visionEnabled:", CommandBase::visionEnabled);
         cvSink.GrabFrame(source);
+      if (CommandBase::visionEnabled) {
         cvSink.GrabFrame(mask);
         cvSink.GrabFrame(draw);
         if (!source.empty()) {
@@ -52,7 +54,7 @@ static void VisionThread()
           // findCounters() locates the reflective shapes 
           findContours(mask, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0,0));
           // We don't know how to deal with more than two targets, so abort if > 2
-          if (contours.size() <= 2) { // One or two targest we can handle
+          if (contours.size() <= 2) { // One or two targets we can handle
             double avgCenterX=0; 
             double avgCenterY=0;
             for (size_t i=0; i<contours.size(); i++) {
@@ -72,12 +74,22 @@ static void VisionThread()
             avgCenterX /= contours.size();
             avgCenterY /= contours.size();
             circle(draw, cv::Point(avgCenterX, avgCenterY), 5, cv::Scalar(250, 250, 0), 3, 8, 0);
+            CommandBase::visionOffset = avgCenterX / 320.0 - 1.0;
+            frc::SmartDashboard::PutNumber("visionOffset:", CommandBase::visionOffset);
           }
         }
         else {
-          cvSink.GrabFrame(output);
+          cvSink.GrabFrame(draw);
         }
-        outputStreamStd.PutFrame(draw);
+        if (!draw.empty()) {
+          outputStreamStd.PutFrame(draw);
+        }
+      } //visionEnabled
+      else {
+        if (!source.empty()) {
+          outputStreamStd.PutFrame(source);
+        }
+      }
     }
 }
 #endif
@@ -87,10 +99,10 @@ void Robot::RobotInit() {
   CommandBase::init();
 
 // Launch vision thread
+#ifndef RAW_CAMERA
   std::thread visionThread(VisionThread);
   visionThread.detach();
-
-#ifdef RAW_CAMERA
+#else  // RAW_CAMERA
   cs::UsbCamera camera1 = CameraServer::GetInstance()->StartAutomaticCapture(1);
   cs::UsbCamera camera0 = CameraServer::GetInstance()->StartAutomaticCapture(0);
   camera1.SetResolution(640, 480);
