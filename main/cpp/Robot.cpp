@@ -87,7 +87,10 @@ static void VisionThread()
       } //visionEnabled
       else {
         if (!source.empty()) {
-          outputStreamStd.PutFrame(source);
+          cvtColor(source, output, cv::COLOR_BGR2GRAY);
+          resize(output, draw, cvSize(320, 240));
+          outputStreamStd.PutFrame(output);
+          
         }
       }
     }
