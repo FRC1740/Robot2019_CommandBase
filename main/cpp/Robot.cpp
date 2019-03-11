@@ -31,6 +31,7 @@ static void VisionThread()
     camera.SetExposureManual(25);
     camera.SetFPS(15);
     camera.SetResolution(640, 480);
+    camera.SetWhiteBalanceManual(5000);
     cs::CvSink cvSink = CameraServer::GetInstance()->GetVideo();
     cs::CvSource outputStreamStd = CameraServer::GetInstance()->PutVideo("Gray", 640, 480);
     cv::Mat source;
@@ -67,6 +68,7 @@ static void VisionThread()
               // Determine the center X, Y of the blob
               double centerX = boundRect.x + (boundRect.width / 2);
               double centerY = boundRect.y + (boundRect.height / 2);
+              // Determine the AVERAGE center X, Y of all blobs
               // Determine the AVERAGE center X, Y of all blobs
               avgCenterX += centerX;
               avgCenterY += centerY;
