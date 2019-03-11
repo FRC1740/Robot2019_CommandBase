@@ -54,15 +54,26 @@ static void VisionThread()
           // findCounters() locates the reflective shapes 
           findContours(mask, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0,0));
 <<<<<<< HEAD
+<<<<<<< HEAD
           if (contours.size() <= 2) { // Abort if too many targets!
             double avgCenterX=0;
+=======
+          // We don't know how to deal with more than two targets, so abort if > 2
+          if (contours.size() <= 2) { // One or two targets we can handle
+            double avgCenterX=0; 
+>>>>>>> 5186eb3c91b1ccb64ea53df01d3269f0f4135ba3
             double avgCenterY=0;
-            for (size_t i=0; i<contours.size(); i++) {      
+            for (size_t i=0; i<contours.size(); i++) {
+              // drawCountours() below will outline the countours in magenta      
               drawContours(draw, contours, i, cv::Scalar(255, 0, 255), 3, 8, hierarchy, 0, cv::Point() );
+              // find the bounding rectangle of the blob
               cv::Rect boundRect = boundingRect(contours[i]);
+              // Outline the bounding rectangle in yellow
               rectangle(draw, boundRect, cv::Scalar(0, 255, 255), 3, 8, 0);
+              // Determine the center X, Y of the blob
               double centerX = boundRect.x + (boundRect.width / 2);
               double centerY = boundRect.y + (boundRect.height / 2);
+<<<<<<< HEAD
 =======
           // We don't know how to deal with more than two targets, so abort if > 2
           if (contours.size() <= 2) { // One or two targets we can handle
@@ -80,6 +91,9 @@ static void VisionThread()
               double centerY = boundRect.y + (boundRect.height / 2);
               // Determine the AVERAGE center X, Y of all blobs
 >>>>>>> upstream/master
+=======
+              // Determine the AVERAGE center X, Y of all blobs
+>>>>>>> 5186eb3c91b1ccb64ea53df01d3269f0f4135ba3
               avgCenterX += centerX;
               avgCenterY += centerY;
               }
@@ -87,18 +101,26 @@ static void VisionThread()
             avgCenterY /= contours.size();
             circle(draw, cv::Point(avgCenterX, avgCenterY), 5, cv::Scalar(250, 250, 0), 3, 8, 0);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
             CommandBase::visionOffset = avgCenterX / 320.0 - 1.0;
             frc::SmartDashboard::PutNumber("visionOffset:", CommandBase::visionOffset);
 >>>>>>> upstream/master
+=======
+            CommandBase::visionOffset = avgCenterX / 320.0 - 1.0;
+            frc::SmartDashboard::PutNumber("visionOffset:", CommandBase::visionOffset);
+>>>>>>> 5186eb3c91b1ccb64ea53df01d3269f0f4135ba3
           }
         }
         else {
           cvSink.GrabFrame(draw);
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
         outputStreamStd.PutFrame(draw);
 =======
+=======
+>>>>>>> 5186eb3c91b1ccb64ea53df01d3269f0f4135ba3
         if (!draw.empty()) {
           outputStreamStd.PutFrame(draw);
         }
@@ -108,7 +130,10 @@ static void VisionThread()
           outputStreamStd.PutFrame(source);
         }
       }
+<<<<<<< HEAD
 >>>>>>> upstream/master
+=======
+>>>>>>> 5186eb3c91b1ccb64ea53df01d3269f0f4135ba3
     }
 }
 #endif
