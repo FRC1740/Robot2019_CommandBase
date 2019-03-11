@@ -27,6 +27,8 @@ public:
 	static MecanumDriveSystem *mecanumDriveSystem;
     static GamePieceManipulator *gamePieceManipulator;
 	static HABClimber *habClimber;
-	static Utility *utility; 
+	static Utility *utility;
+	static double visionOffset;
+	static bool visionEnabled;
 };
 #endif
