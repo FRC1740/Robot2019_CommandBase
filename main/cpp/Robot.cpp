@@ -31,6 +31,7 @@ static void VisionThread()
     camera.SetExposureManual(25);
     camera.SetFPS(15);
     camera.SetResolution(640, 480);
+    camera.SetWhiteBalanceManual(5000);
     cs::CvSink cvSink = CameraServer::GetInstance()->GetVideo();
     cs::CvSource outputStreamStd = CameraServer::GetInstance()->PutVideo("Gray", 640, 480);
     cv::Mat source;
