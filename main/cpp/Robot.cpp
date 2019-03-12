@@ -29,8 +29,8 @@ static void VisionThread()
 {
     cs::UsbCamera camera = CameraServer::GetInstance()->StartAutomaticCapture();
     // Reduce Exposure when using monochrome/brightness only
-//    camera.SetExposureManual(25);
-    camera.SetExposureManual(100);
+    camera.SetExposureManual(25);
+//    camera.SetExposureManual(100);
     camera.SetFPS(15);
     camera.SetResolution(640, 480);
     camera.SetWhiteBalanceManual(5000);
@@ -66,14 +66,14 @@ static void VisionThread()
 
           // inRange selects only the brightest values in the image frame
           // inRange(output, cv::Scalar(128, 128, 128), cv::Scalar(255, 255, 255), mask);
-          // findCounters() locates the reflective shapes 
+          // findCounters() locates the reflective shapes
           findContours(mask, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0,0));
           // We don't know how to deal with more than two targets, so abort if > 2
           if (contours.size() <= 2) { // One or two targets we can handle
-            double avgCenterX=0; 
+            double avgCenterX=0;
             double avgCenterY=0;
             for (size_t i=0; i<contours.size(); i++) {
-              // drawCountours() below will outline the countours in magenta      
+              // drawCountours() below will outline the countours in magenta
               drawContours(draw, contours, i, cv::Scalar(255, 0, 255), 3, 8, hierarchy, 0, cv::Point() );
               // find the bounding rectangle of the blob
               cv::Rect boundRect = boundingRect(contours[i]);
@@ -106,7 +106,7 @@ static void VisionThread()
           cvtColor(source, output, cv::COLOR_BGR2GRAY);
           resize(output, draw, cvSize(320, 240));
           outputStreamStd.PutFrame(output);
-          
+
         }
       }
     }
@@ -114,7 +114,7 @@ static void VisionThread()
 #endif
 
 void Robot::RobotInit() {
-  // Instantiate all subsystems objects 
+  // Instantiate all subsystems objects
   CommandBase::init();
 
 // Launch vision thread
