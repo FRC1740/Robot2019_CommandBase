@@ -28,9 +28,12 @@ ExampleSubsystem Robot::m_subsystem;
 static void VisionThread()
 {
     cs::UsbCamera camera = CameraServer::GetInstance()->StartAutomaticCapture();
+    // Reduce Exposure when using monochrome/brightness only
     camera.SetExposureManual(25);
+//    camera.SetExposureManual(100);
     camera.SetFPS(15);
     camera.SetResolution(640, 480);
+    camera.SetWhiteBalanceManual(5000);
     cs::CvSink cvSink = CameraServer::GetInstance()->GetVideo();
     cs::CvSource outputStreamStd = CameraServer::GetInstance()->PutVideo("Gray", 640, 480);
     cv::Mat source;
@@ -43,22 +46,34 @@ static void VisionThread()
     while(true) {
       //frc::SmartDashboard::PutBoolean("visionEnabled:", CommandBase::visionEnabled);
         cvSink.GrabFrame(source);
-      if (CommandBase::visionEnabled) {
+        if (1) {
+//      if (CommandBase::visionEnabled) {
         cvSink.GrabFrame(mask);
         cvSink.GrabFrame(draw);
         if (!source.empty()) {
-          cvtColor(source, output, cv::COLOR_BGR2GRAY);
-//          cvtColor(source, output, cv::COLOR_BGR2HSV);
+          // Filter based on brightness ONLY
+//          cvtColor(source, output, cv::COLOR_BGR2GRAY);
+          int lowH = 80; // Yellow end of green
+          int highH = 160; // Cyan end of green
+          int lowS = 75; // Percent saturation
+          int highS = 100; // Fully saturated
+          int lowV = 85; // Darkest value
+          int highV = 100; // Brighest value
+           // Filter based on COLOR
+          cvtColor(source, output, cv::COLOR_BGR2HSV);
+          // Filter the image based on our HSV low/high threshold values
+          inRange(output, cv::Scalar(lowH, lowS, lowV), cv::Scalar(highH, highS, highV), mask);
+
           // inRange selects only the brightest values in the image frame
-          inRange(output, cv::Scalar(128, 128, 128), cv::Scalar(255, 255, 255), mask);
-          // findCounters() locates the reflective shapes 
+          // inRange(output, cv::Scalar(128, 128, 128), cv::Scalar(255, 255, 255), mask);
+          // findCounters() locates the reflective shapes
           findContours(mask, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0,0));
           // We don't know how to deal with more than two targets, so abort if > 2
           if (contours.size() <= 2) { // One or two targets we can handle
-            double avgCenterX=0; 
+            double avgCenterX=0;
             double avgCenterY=0;
             for (size_t i=0; i<contours.size(); i++) {
-              // drawCountours() below will outline the countours in magenta      
+              // drawCountours() below will outline the countours in magenta
               drawContours(draw, contours, i, cv::Scalar(255, 0, 255), 3, 8, hierarchy, 0, cv::Point() );
               // find the bounding rectangle of the blob
               cv::Rect boundRect = boundingRect(contours[i]);
@@ -67,6 +82,7 @@ static void VisionThread()
               // Determine the center X, Y of the blob
               double centerX = boundRect.x + (boundRect.width / 2);
               double centerY = boundRect.y + (boundRect.height / 2);
+              // Determine the AVERAGE center X, Y of all blobs
               // Determine the AVERAGE center X, Y of all blobs
               avgCenterX += centerX;
               avgCenterY += centerY;
@@ -87,7 +103,10 @@ static void VisionThread()
       } //visionEnabled
       else {
         if (!source.empty()) {
-          outputStreamStd.PutFrame(source);
+          cvtColor(source, output, cv::COLOR_BGR2GRAY);
+          resize(output, draw, cvSize(320, 240));
+          outputStreamStd.PutFrame(output);
+
         }
       }
     }
@@ -95,7 +114,7 @@ static void VisionThread()
 #endif
 
 void Robot::RobotInit() {
-  // Instantiate all subsystems objects 
+  // Instantiate all subsystems objects
   CommandBase::init();
 
 // Launch vision thread
