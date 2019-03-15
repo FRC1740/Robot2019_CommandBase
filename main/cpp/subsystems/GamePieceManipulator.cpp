@@ -9,19 +9,54 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 // Max and min voltage for hinge pot positions
+#define HINGE_A_MAX   0.8
+#define HINGE_A_MIN   4.8
+#define HINGE_A_TIN   1.0  // Full travel time in
+#define HINGE_A_TOUT  1.0  // Full travel time out
+
+#define HINGE_B_MAX   0.8
+#define HINGE_B_MIN   4.8
+#define HINGE_B_TIN   1.0
+#define HINGE_B_TOUT  1.0
+
+#define HINGE_C_MAX   0.8
+#define HINGE_C_MIN   4.8
+#define HINGE_C_TIN   1.0
+#define HINGE_C_TOUT  1.0
+
+#define HINGE_D_MAX   0.8
+#define HINGE_D_MIN   4.8
+#define HINGE_D_TIN   1.0
+#define HINGE_D_TOUT  1.0
+
 // Used by manual mode
-#define HINGE_MAX_LEFT   0.45  // 4.3
-#define HINGE_MIN_LEFT   4.3   // .45
-#define HINGE_MAX_RIGHT  0.3   // 4.95
-#define HINGE_MIN_RIGHT  4.95  // 0.3
+#define HINGE_MAX_LEFT   HINGE_A_MAX
+#define HINGE_MIN_LEFT   HINGE_A_MIN
+#define HINGE_TIN_LEFT   HINGE_A_TIN
+#define HINGE_TOUT_LEFT  HINGE_A_TOUT
+
+#define HINGE_MAX_RIGHT  HINGE_B_MAX
+#define HINGE_MIN_RIGHT  HINGE_B_MIN
+#define HINGE_TIN_RIGHT  HINGE_B_TIN
+#define HINGE_TOUT_RIGHT HINGE_B_TOUT
+
+#define HINGE_TIN_MAX   (MAX(HINGE_TIN_LEFT, HINGE_TIN_RIGHT))
+#define HINGE_TOUT_MAX  (MAX(HINGE_TOUT_LEFT, HINGE_TOUT_RIGHT))
+
 #define HINGE_RANGE_LEFT (HINGE_MAX_LEFT - HINGE_MIN_LEFT)
 #define HINGE_RANGE_RIGHT (HINGE_MAX_RIGHT - HINGE_MIN_RIGHT)
 
 // Used by PID mode
 constexpr double hingeMaxLeft  = 0.7;
 constexpr double hingeMinLeft  = 4.7;
+constexpr double hingeVinLeft  = 1.0;
+constexpr double hingeVoutLeft = 1.0;
+
 constexpr double hingeMaxRight = 0.8;
 constexpr double hingeMinRight = 4.8;
+constexpr double hingeVinRight = 1.0;
+constexpr double hingeVoutRight= 1.0;
+
 constexpr double hingeLeftKp   = 1.0;
 constexpr double hingeLeftKi   = 0.05;
 constexpr double hingeLeftKd   = 0.75;
