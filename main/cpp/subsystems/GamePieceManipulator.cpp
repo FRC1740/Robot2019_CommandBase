@@ -11,8 +11,8 @@
 // Max and min voltage for hinge pot positions
 #define HINGE_A_MAX   0.8
 #define HINGE_A_MIN   4.8
-#define HINGE_A_TIN   1.0  // Full travel time in
-#define HINGE_A_TOUT  1.0  // Full travel time out
+#define HINGE_A_TIN   1.0  // Full travel time in under load
+#define HINGE_A_TOUT  1.0  // Full travel time out under load
 
 #define HINGE_B_MAX   0.8
 #define HINGE_B_MIN   4.8
@@ -30,32 +30,35 @@
 #define HINGE_D_TOUT  1.0
 
 // Used by manual mode
-#define HINGE_MAX_LEFT   HINGE_A_MAX
-#define HINGE_MIN_LEFT   HINGE_A_MIN
-#define HINGE_TIN_LEFT   HINGE_A_TIN
-#define HINGE_TOUT_LEFT  HINGE_A_TOUT
+//#define HINGE_MAX_LEFT   HINGE_A_MAX
+//#define HINGE_MIN_LEFT   HINGE_A_MIN
+//#define HINGE_TIN_LEFT   HINGE_A_TIN
+//#define HINGE_TOUT_LEFT  HINGE_A_TOUT
 
-#define HINGE_MAX_RIGHT  HINGE_B_MAX
-#define HINGE_MIN_RIGHT  HINGE_B_MIN
-#define HINGE_TIN_RIGHT  HINGE_B_TIN
-#define HINGE_TOUT_RIGHT HINGE_B_TOUT
+//#define HINGE_MAX_RIGHT  HINGE_B_MAX
+//#define HINGE_MIN_RIGHT  HINGE_B_MIN
+//#define HINGE_TIN_RIGHT  HINGE_B_TIN
+//#define HINGE_TOUT_RIGHT HINGE_B_TOUT
 
-#define HINGE_TIN_MAX   (MAX(HINGE_TIN_LEFT, HINGE_TIN_RIGHT))
-#define HINGE_TOUT_MAX  (MAX(HINGE_TOUT_LEFT, HINGE_TOUT_RIGHT))
+//#define HINGE_TIN_MAX   (MAX(HINGE_TIN_LEFT, HINGE_TIN_RIGHT))
+//#define HINGE_TOUT_MAX  (MAX(HINGE_TOUT_LEFT, HINGE_TOUT_RIGHT))
 
-#define HINGE_RANGE_LEFT (HINGE_MAX_LEFT - HINGE_MIN_LEFT)
-#define HINGE_RANGE_RIGHT (HINGE_MAX_RIGHT - HINGE_MIN_RIGHT)
+//#define HINGE_RANGE_LEFT (HINGE_MAX_LEFT - HINGE_MIN_LEFT)
+//#define HINGE_RANGE_RIGHT (HINGE_MAX_RIGHT - HINGE_MIN_RIGHT)
 
 // Used by PID mode
-constexpr double hingeMaxLeft  = 0.7;
-constexpr double hingeMinLeft  = 4.7;
-constexpr double hingeVinLeft  = 1.0;
-constexpr double hingeVoutLeft = 1.0;
+constexpr double hingeMaxLeft  = HINGE_A_MAX;
+constexpr double hingeMinLeft  = HINGE_A_MIN;
+constexpr double hingeMaxRight = HINGE_B_MAX;
+constexpr double hingeMinRight = HINGE_B_MIN;
 
-constexpr double hingeMaxRight = 0.8;
-constexpr double hingeMinRight = 4.8;
-constexpr double hingeVinRight = 1.0;
-constexpr double hingeVoutRight= 1.0;
+constexpr double hingeTinMax = std::max(hingeMaxLeft,hingeMinLeft);
+constexpr double hingeToutMax = HINGE_B_MIN;
+
+constexpr double hingeVinLeft  = HINGE_A_TIN / HINGE_TIN_MAX;
+constexpr double hingeVoutLeft = HINGE_A_TOUT / HINGE_TOUT_MAX;
+constexpr double hingeVinRight = HINGE_B_TIN / HINGE_TIN_MAX;
+constexpr double hingeVoutRight= HINGE_B_TOUT / HINGE_TOUT_MAX;
 
 constexpr double hingeLeftKp   = 1.0;
 constexpr double hingeLeftKi   = 0.05;
