@@ -5,19 +5,29 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+#ifndef TESTING
 #include "subsystems/GamePieceManipulator.h"
 #include <frc/smartdashboard/SmartDashboard.h>
+#endif
 
-// Max and min voltage for hinge pot positions
+/* Measured parameters for hinge actuators
+ * Procedure:
+ *  1. Carefully use manual mode to get voltage for max and min extents
+ *  2. Fill in under correct label (A, B, C or D) MAX, MIN and redeploy
+ *  3. Manual full speed under load, get time (secs) to extend and retract
+ *  4. Fill in under correct label TOUT, TIN and redeploy
+ *  5. Assign A/B/C/D in the section below to actual Left/Right position
+ *  6. Test with PID, tune PID constants accordingly
+ */
 #define HINGE_A_MAX   0.8
 #define HINGE_A_MIN   4.8
-#define HINGE_A_TIN   1.0  // Full travel time in under load
-#define HINGE_A_TOUT  1.0  // Full travel time out under load
+#define HINGE_A_TOUT  3.0  // Full travel time out under load
+#define HINGE_A_TIN   7.0  // Full travel time in under load
 
 #define HINGE_B_MAX   0.8
 #define HINGE_B_MIN   4.8
-#define HINGE_B_TIN   1.0
-#define HINGE_B_TOUT  1.0
+#define HINGE_B_TOUT  4.0
+#define HINGE_B_TIN   6.0
 
 #define HINGE_C_MAX   0.8
 #define HINGE_C_MIN   4.8
@@ -29,37 +39,32 @@
 #define HINGE_D_TIN   1.0
 #define HINGE_D_TOUT  1.0
 
-// Used by manual mode
-//#define HINGE_MAX_LEFT   HINGE_A_MAX
-//#define HINGE_MIN_LEFT   HINGE_A_MIN
-//#define HINGE_TIN_LEFT   HINGE_A_TIN
-//#define HINGE_TOUT_LEFT  HINGE_A_TOUT
+// Assign A/B to L/R according to robot placement
+constexpr double hingeMaxLeft   = HINGE_A_MAX;
+constexpr double hingeMinLeft   = HINGE_A_MIN;
+constexpr double hingeTinLeft   = HINGE_A_TIN;
+constexpr double hingeToutLeft  = HINGE_A_TOUT;
 
-//#define HINGE_MAX_RIGHT  HINGE_B_MAX
-//#define HINGE_MIN_RIGHT  HINGE_B_MIN
-//#define HINGE_TIN_RIGHT  HINGE_B_TIN
-//#define HINGE_TOUT_RIGHT HINGE_B_TOUT
+constexpr double hingeMaxRight  = HINGE_B_MAX;
+constexpr double hingeMinRight  = HINGE_B_MIN;
+constexpr double hingeTinRight  = HINGE_B_TIN;
+constexpr double hingeToutRight = HINGE_B_TOUT;
 
-//#define HINGE_TIN_MAX   (MAX(HINGE_TIN_LEFT, HINGE_TIN_RIGHT))
-//#define HINGE_TOUT_MAX  (MAX(HINGE_TOUT_LEFT, HINGE_TOUT_RIGHT))
+// The constants below are calculated, not manually modified ------------------
+constexpr double hingeRangeLeft  = hingeMaxLeft - hingeMinLeft;
+constexpr double hingeRangeRight = hingeMaxRight - hingeMinRight;
 
-//#define HINGE_RANGE_LEFT (HINGE_MAX_LEFT - HINGE_MIN_LEFT)
-//#define HINGE_RANGE_RIGHT (HINGE_MAX_RIGHT - HINGE_MIN_RIGHT)
+#define HMAX(a,b) ((a)<(b)?(b):(a))  // Roll our own
+constexpr double hingeTinMax = HMAX(hingeTinLeft, hingeTinRight);
+constexpr double hingeToutMax = HMAX(hingeToutLeft, hingeToutRight);
 
-// Used by PID mode
-constexpr double hingeMaxLeft  = HINGE_A_MAX;
-constexpr double hingeMinLeft  = HINGE_A_MIN;
-constexpr double hingeMaxRight = HINGE_B_MAX;
-constexpr double hingeMinRight = HINGE_B_MIN;
+constexpr double hingeVinLeft   = hingeTinLeft / hingeTinMax;
+constexpr double hingeVinRight  = hingeTinRight / hingeTinMax;
+constexpr double hingeVoutLeft  = hingeToutLeft / hingeToutMax;
+constexpr double hingeVoutRight = hingeToutRight / hingeToutMax;
+// end of calculated section --------------------------------------------------
 
-constexpr double hingeTinMax = std::max(hingeMaxLeft,hingeMinLeft);
-constexpr double hingeToutMax = HINGE_B_MIN;
-
-constexpr double hingeVinLeft  = HINGE_A_TIN / HINGE_TIN_MAX;
-constexpr double hingeVoutLeft = HINGE_A_TOUT / HINGE_TOUT_MAX;
-constexpr double hingeVinRight = HINGE_B_TIN / HINGE_TIN_MAX;
-constexpr double hingeVoutRight= HINGE_B_TOUT / HINGE_TOUT_MAX;
-
+// Manually entered for tuning PID
 constexpr double hingeLeftKp   = 1.0;
 constexpr double hingeLeftKi   = 0.05;
 constexpr double hingeLeftKd   = 0.75;
@@ -67,6 +72,7 @@ constexpr double hingeRightKp  = hingeLeftKp;
 constexpr double hingeRightKi  = hingeLeftKi;
 constexpr double hingeRightKd  = hingeLeftKd;
 
+#ifndef TESTING
 GamePieceManipulator::GamePieceManipulator() : frc::Subsystem("GamePieceManipulator") {
 
   ballIntakeLimit = new frc::DigitalInput(0);
@@ -92,13 +98,13 @@ GamePieceManipulator::GamePieceManipulator() : frc::Subsystem("GamePieceManipula
   bitsR = hingePotR->GetAverageBits();
 
   hingeInL = new HingePIDSource(hingePotL,
-    hingeMinLeft, hingeMaxLeft - hingeMinLeft);
+    hingeMinLeft, hingeRangeLeft);
   hingeInR = new HingePIDSource(hingePotR,
-    hingeMinRight, hingeMaxRight - hingeMinRight);
+    hingeMinRight, hingeRangeRight);
   hingeOutL = new HingePIDOutput(hingeMotorL, hingePotL,
-    hingeMinLeft, hingeMaxLeft - hingeMinLeft);
+    hingeMinLeft, hingeRangeLeft);
   hingeOutR = new HingePIDOutput(hingeMotorR, hingePotR,
-    hingeMinRight, hingeMaxRight - hingeMinRight);
+    hingeMinRight, hingeRangeRight);
 
   hingePIDL = new frc::PIDController(hingeLeftKp, hingeLeftKi, hingeLeftKd,
     *hingeInL, *hingeOutL);
@@ -106,7 +112,7 @@ GamePieceManipulator::GamePieceManipulator() : frc::Subsystem("GamePieceManipula
     *hingeInR, *hingeOutR);
   frc::SmartDashboard::PutData("Hinge PID Left", hingePIDL);
   frc::SmartDashboard::PutData("Minge PID Right", hingePIDR);
-  
+
   hingePIDL->SetInputRange(0.0, 1.0);  // position [0,1] (PID) <- [4.7,0.7]
   hingePIDL->SetOutputRange(-1.0, 1.0);  // velocity
   hingePIDR->SetInputRange(0.0, 1.0);
@@ -131,6 +137,7 @@ void GamePieceManipulator::HatchEject() {
 void GamePieceManipulator::HatchInject() {
     hatchPanel->Set(frc::DoubleSolenoid::Value::kReverse);
   }
+#endif //TESTING
 
 /*******************************
     Arm Raise & Lower Methods
@@ -138,13 +145,19 @@ void GamePieceManipulator::HatchInject() {
 //v = velocity
 #define GP_DEADBAND 0.25
 void GamePieceManipulator::Move(double v) {
- 
+
     double positionL = hingePotL->GetVoltage();
     // Scale positionL to [0, 1]
-    positionL = (positionL - HINGE_MIN_LEFT) / HINGE_RANGE_LEFT;
+    positionL = (positionL - hingeMinLeft) / hingeRangeLeft;
+    DBGf(positionL);
     if ((v > GP_DEADBAND && positionL < 1.0)
       || (v < -GP_DEADBAND && positionL > 0.0)) {
-      hingeMotorL->Set(v);
+      if (v > 0) {
+        hingeMotorL->Set(v * hingeVoutLeft);
+      }
+      else {
+        hingeMotorL->Set(v * hingeVinLeft);
+      }
     }
     else {
       hingeMotorL->Set(0.0);
@@ -152,10 +165,15 @@ void GamePieceManipulator::Move(double v) {
 
     double positionR = hingePotR->GetVoltage();
     // Scale positionR to [0, 1]
-    positionR = (positionR - HINGE_MIN_RIGHT) / HINGE_RANGE_RIGHT;
+    positionR = (positionR - hingeMinRight) / hingeRangeRight;
     if ((v > GP_DEADBAND && positionR < 1.0)
       || (v < -GP_DEADBAND && positionR > 0.0)) {
-      hingeMotorR->Set(v);
+      if (v > 0) {
+        hingeMotorR->Set(v * hingeVoutRight);
+      }
+      else {
+        hingeMotorR->Set(v * hingeVinRight);
+      }
     }
     else {
       hingeMotorR->Set(0.0);
@@ -169,6 +187,7 @@ void GamePieceManipulator::MoveTo(double p) {
   EnablePIDLoop();
 }
 
+#ifndef TESTING
 void GamePieceManipulator::EnablePIDLoop() {
   hingePIDL->Enable();
   hingePIDR->Enable();
@@ -208,7 +227,7 @@ void HingePIDSource::SetPIDSourceType(frc::PIDSourceType pidSource) {
   // No-op (do not change from default)
 }
 
-HingePIDOutput::HingePIDOutput(WPI_TalonSRX *motor, frc::AnalogInput *pot, 
+HingePIDOutput::HingePIDOutput(WPI_TalonSRX *motor, frc::AnalogInput *pot,
   double min, double range)
   : frc::PIDOutput() {
   m_motor = motor;
@@ -248,3 +267,4 @@ void GamePieceManipulator::CargoEject() {
 void GamePieceManipulator::CargoStop() {
     ballMotor->Set(0.0);
 }
+#endif // TESTING
