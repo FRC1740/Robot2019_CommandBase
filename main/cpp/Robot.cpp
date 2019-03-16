@@ -46,8 +46,8 @@ static void VisionThread()
     while(true) {
       //frc::SmartDashboard::PutBoolean("visionEnabled:", CommandBase::visionEnabled);
         cvSink.GrabFrame(source);
-        if (1) {
-//      if (CommandBase::visionEnabled) {
+//        if (1) {
+        if (CommandBase::visionEnabled) {
         cvSink.GrabFrame(mask);
         cvSink.GrabFrame(draw);
         if (!source.empty()) {
