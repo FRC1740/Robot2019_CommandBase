@@ -68,7 +68,7 @@ GamePieceManipulator::GamePieceManipulator() : frc::Subsystem("GamePieceManipula
     *hingeInR, *hingeOutR);
   frc::SmartDashboard::PutData("Hinge PID Left", hingePIDL);
   frc::SmartDashboard::PutData("Minge PID Right", hingePIDR);
-  
+
   hingePIDL->SetInputRange(0.0, 1.0);  // position [0,1] (PID) <- [4.7,0.7]
   hingePIDL->SetOutputRange(-1.0, 1.0);  // velocity
   hingePIDR->SetInputRange(0.0, 1.0);
@@ -100,7 +100,7 @@ void GamePieceManipulator::HatchInject() {
 //v = velocity
 #define GP_DEADBAND 0.25
 void GamePieceManipulator::Move(double v) {
- 
+
     double positionL = hingePotL->GetVoltage();
     // Scale positionL to [0, 1]
     positionL = (positionL - HINGE_MIN_LEFT) / HINGE_RANGE_LEFT;
@@ -170,7 +170,7 @@ void HingePIDSource::SetPIDSourceType(frc::PIDSourceType pidSource) {
   // No-op (do not change from default)
 }
 
-HingePIDOutput::HingePIDOutput(WPI_TalonSRX *motor, frc::AnalogInput *pot, 
+HingePIDOutput::HingePIDOutput(WPI_TalonSRX *motor, frc::AnalogInput *pot,
   double min, double range)
   : frc::PIDOutput() {
   m_motor = motor;
