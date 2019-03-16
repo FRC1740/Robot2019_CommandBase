@@ -5,10 +5,8 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-#ifndef TESTING
 #include "subsystems/GamePieceManipulator.h"
 #include <frc/smartdashboard/SmartDashboard.h>
-#endif
 
 /* Measured parameters for hinge actuators
  * Procedure:
@@ -72,7 +70,6 @@ constexpr double hingeRightKp  = hingeLeftKp;
 constexpr double hingeRightKi  = hingeLeftKi;
 constexpr double hingeRightKd  = hingeLeftKd;
 
-#ifndef TESTING
 GamePieceManipulator::GamePieceManipulator() : frc::Subsystem("GamePieceManipulator") {
 
   ballIntakeLimit = new frc::DigitalInput(0);
@@ -137,7 +134,6 @@ void GamePieceManipulator::HatchEject() {
 void GamePieceManipulator::HatchInject() {
     hatchPanel->Set(frc::DoubleSolenoid::Value::kReverse);
   }
-#endif //TESTING
 
 /*******************************
     Arm Raise & Lower Methods
@@ -149,7 +145,6 @@ void GamePieceManipulator::Move(double v) {
     double positionL = hingePotL->GetVoltage();
     // Scale positionL to [0, 1]
     positionL = (positionL - hingeMinLeft) / hingeRangeLeft;
-    DBGf(positionL);
     if ((v > GP_DEADBAND && positionL < 1.0)
       || (v < -GP_DEADBAND && positionL > 0.0)) {
       if (v > 0) {
@@ -187,7 +182,6 @@ void GamePieceManipulator::MoveTo(double p) {
   EnablePIDLoop();
 }
 
-#ifndef TESTING
 void GamePieceManipulator::EnablePIDLoop() {
   hingePIDL->Enable();
   hingePIDR->Enable();
@@ -267,4 +261,3 @@ void GamePieceManipulator::CargoEject() {
 void GamePieceManipulator::CargoStop() {
     ballMotor->Set(0.0);
 }
-#endif // TESTING
