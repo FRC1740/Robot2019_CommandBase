@@ -17,15 +17,15 @@
  *  5. Assign A/B/C/D in the section below to actual Left/Right position
  *  6. Test with PID, tune PID constants accordingly
  */
-#define HINGE_A_MAX   0.8
-#define HINGE_A_MIN   4.8
-#define HINGE_A_TOUT  3.0  // Full travel time out under load
-#define HINGE_A_TIN   7.0  // Full travel time in under load
+#define HINGE_A_MAX   0.8  // .398 Measured Hard Limit of Actuator
+#define HINGE_A_MIN   4.8  // 4.352 Measured Hard Limit of Actuator
+#define HINGE_A_TOUT  1.0  // Full travel time out under load
+#define HINGE_A_TIN   1.0  // Full travel time in under load
 
-#define HINGE_B_MAX   0.8
-#define HINGE_B_MIN   4.8
-#define HINGE_B_TOUT  4.0
-#define HINGE_B_TIN   6.0
+#define HINGE_B_MAX   0.25  // .25tg2 Measured limit 6 3/4 in.
+#define HINGE_B_MIN   4.78  // 4.78 Measured limit 5/8 in.
+#define HINGE_B_TOUT  1.0
+#define HINGE_B_TIN   1.0
 
 #define HINGE_C_MAX   0.8
 #define HINGE_C_MIN   4.8
@@ -49,8 +49,8 @@ constexpr double hingeTinRight  = HINGE_B_TIN;
 constexpr double hingeToutRight = HINGE_B_TOUT;
 
 // The constants below are calculated, not manually modified ------------------
-constexpr double hingeRangeLeft  = hingeMaxLeft - hingeMinLeft;
-constexpr double hingeRangeRight = hingeMaxRight - hingeMinRight;
+constexpr double hingeRangeLeft  = hingeMaxLeft - hingeMinLeft; // NEGATIVE VALUE !! (MIN>MAX)
+constexpr double hingeRangeRight = hingeMaxRight - hingeMinRight; // NEGATIVE VALUE !! (MIN>MAX)
 
 #define HMAX(a,b) ((a)<(b)?(b):(a))  // Roll our own
 constexpr double hingeTinMax = HMAX(hingeTinLeft, hingeTinRight);

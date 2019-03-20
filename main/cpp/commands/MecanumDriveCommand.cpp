@@ -29,12 +29,12 @@ void MecanumDriveCommand::Execute() {
   else {
   CommandBase::visionEnabled = false;
   CommandBase::visionOffset = 0.0;
-  if (useGyro) {
-    mecanumDriveSystem->Saucer(this->GetX(), this->GetInvertedY(), this->GetTwist());
-  }
-  else {
-    mecanumDriveSystem->Go(this->GetX(), this->GetInvertedY(), this->GetTwist());
-  }
+    if (useGyro) {
+      mecanumDriveSystem->Saucer(this->GetX(), this->GetInvertedY(), this->GetTwist());
+    }
+    else {
+      mecanumDriveSystem->Go(this->GetX(), this->GetInvertedY(), this->GetTwist());
+    }
   }
 }
 
@@ -43,7 +43,7 @@ bool MecanumDriveCommand::IsFinished() { return false; }
 
 // Called once after isFinished returns true
 void MecanumDriveCommand::End() {
-  mecanumDriveSystem->Stop();  
+  mecanumDriveSystem->Stop();
 }
 
 // Called when another command which requires one or more of the same
@@ -78,7 +78,7 @@ double MecanumDriveCommand::Deadband(double val)
   }
   if (val != 0) {
    newVal = pow(val, 2);
-  } 
+  }
   if (val >= 0) {
     return newVal;
   }

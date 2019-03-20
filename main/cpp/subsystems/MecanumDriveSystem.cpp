@@ -25,10 +25,12 @@ void MecanumDriveSystem::InitDefaultCommand() {
 
 }
 void MecanumDriveSystem::Saucer(double x, double y, double twist) {
+//  m_robotDrive->DriveCartesian(0, 0, 0, 0); // Safety Disable Drive
   m_robotDrive->DriveCartesian(x, y, twist, -gyro->GetAngle());
 	WriteDashboard();
 }
 void MecanumDriveSystem::Go(double x, double y, double twist) {
+//  m_robotDrive->DriveCartesian(0, 0, 0, 0); // Safety Disable Drive
   m_robotDrive->DriveCartesian(x, y, twist, 0.0);
 	WriteDashboard();
 }
