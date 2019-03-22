@@ -13,9 +13,9 @@
 #define LIFT_MOTOR_L 4
 #define LIFT_MOTOR_R 5
 
-#define UP 1.0
+#define UP 0.07
 #define DOWN -UP
-#define FWD 1.0
+#define FWD 0.33
 #define REV -FWD
 
 HABClimber::HABClimber() : Subsystem("HABClimber") {
@@ -85,11 +85,11 @@ void HABClimber::StopRear() {
 /*
 * Forward/Reverse/Stop Drive
 */
-void HABClimber::DriveFwd() {
-    habDriveMotor->Set(FWD);
+void HABClimber::DriveFwd(double v) {
+    habDriveMotor->Set(FWD * v);
 }
-void HABClimber::DriveRev() {
-    habDriveMotor->Set(REV);
+void HABClimber::DriveRev(double v) {
+    habDriveMotor->Set(REV * v);
 }
 void HABClimber::DriveStop() {
     habDriveMotor->Set(0.0);  

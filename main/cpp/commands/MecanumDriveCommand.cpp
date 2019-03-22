@@ -22,7 +22,7 @@ void MecanumDriveCommand::Initialize() {}
 void MecanumDriveCommand::Execute() {
   // TBD: buttons don't work as well as trigger- use that for vision
   // also, the visionOffset needs a scale and a max limit
-  if (oi->m_XboxDriver->GetYButton()) { //GetRawAxis(2) > 0.5)
+  if (oi->m_XboxDriver->GetAButton()) {
       CommandBase::visionEnabled = true;
       mecanumDriveSystem->Go(0, 0.5 * CommandBase::visionOffset, 0);
   }

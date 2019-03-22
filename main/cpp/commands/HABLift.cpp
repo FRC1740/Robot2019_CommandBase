@@ -23,6 +23,40 @@ void HABLift::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void HABLift::Execute() {
   // Front Lifter
+#define USE_DPAD
+#ifdef USE_DPAD
+  int dpad = oi->m_XboxDriver->GetPOV();
+  if (dpad >= 0) {
+    if ((dpad >= 135) && (dpad <= 225)) {
+      habClimber->LiftFront();
+      habClimber->LiftRear();
+    }
+    else if ((dpad >= 0) && (dpad <= 90)) {
+      habClimber->LowerFront();
+    }
+  }
+  else {
+    habClimber->StopFront();
+    habClimber->StopRear();
+  }
+  if (oi->m_XboxCoDriver->GetBButton()) {
+    habClimber->LowerRear();
+  }
+  else if (dpad < 0) {
+    habClimber->StopFront();
+    habClimber->StopRear();
+  }
+  double habSpeed = oi->m_XboxDriver->GetRawAxis(5);
+  if (habSpeed > DEADBAND) {
+    habClimber->DriveFwd(habSpeed);
+  }
+  else if (habSpeed < -DEADBAND) {
+    habClimber->DriveRev(-habSpeed);
+  }
+  else {
+    habClimber->DriveStop();
+  }
+#else // USE_DPAD
   // Negate input because FORWARD on Y-Axis IS NEGATIVE
   if (-oi->m_XboxCoDriver->GetRawAxis(1) > DEADBAND) {
     habClimber->LiftFront();
@@ -34,7 +68,9 @@ void HABLift::Execute() {
   else {
      habClimber->StopFront();
   }
-  // Rear Lifter
+#endif // USE_DPAD  // Rear Lifter  
+#ifdef USE_DPAD
+#else // USE_DPAD
   // Negate input because FORWARD on Y-Axis IS NEGATIVE
   if (-oi->m_XboxCoDriver->GetRawAxis(5) > DEADBAND) {
     habClimber->LiftRear();
@@ -46,6 +82,7 @@ void HABLift::Execute() {
   else {
     habClimber->StopRear();
   }
+#endif // USE_DPAD
 }
 
 // Make this return true when this Command no longer needs to run execute()
