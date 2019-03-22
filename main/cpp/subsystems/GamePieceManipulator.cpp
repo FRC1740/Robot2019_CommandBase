@@ -141,7 +141,7 @@ void GamePieceManipulator::HatchInject() {
 //v = velocity
 #define GP_DEADBAND 0.25
 void GamePieceManipulator::Move(double v) {
-
+  DisablePIDLoop();  // Added this when combining ManualMove and MoveTo command objects
     double positionL = hingePotL->GetVoltage();
     // Scale positionL to [0, 1]
     positionL = (positionL - hingeMinLeft) / hingeRangeLeft;

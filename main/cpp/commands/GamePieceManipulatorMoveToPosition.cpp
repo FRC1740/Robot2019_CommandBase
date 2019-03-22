@@ -42,6 +42,21 @@ void GamePieceManipulatorMoveToPosition::Execute() {
     gamePieceManipulator->Stop();
     return;
   }
+  // Pulled in from GamePieceManipulatorManual, as the two command objects cannot coexist---------
+#define HINGE_RAISE_INPUT_AXIS 3  // Right Trigger
+#define HINGE_LOWER_INPUT_AXIS 2  // Left Trigger
+#define GP_MANUAL_DEADBAND 0.25
+
+  double velocity;
+  // Left trigger minus right trigger will provide input to move from range -1 to 1
+  velocity = oi->m_XboxCoDriver->GetRawAxis(HINGE_LOWER_INPUT_AXIS) - oi->m_XboxCoDriver->GetRawAxis(HINGE_RAISE_INPUT_AXIS);
+
+  if ((velocity > GP_MANUAL_DEADBAND) || (velocity < -GP_MANUAL_DEADBAND)) {
+    gamePieceManipulator->Move(velocity);
+    // Display arm/hinge position on the dashboard
+    frc::SmartDashboard::PutNumber("Left Hinge", gamePieceManipulator->GetLPosition());
+    frc::SmartDashboard::PutNumber("Right Hinge", gamePieceManipulator->GetRPosition());
+  } // end of copied code ------------------------------------------------------------------------
   else if (oi->m_XboxDriver->GetXButtonPressed()) {
     newSetpoint = degToLinear(posStow);
   }
