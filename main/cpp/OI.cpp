@@ -46,7 +46,7 @@ OI::OI() {
   btnIntakeCargoBall = new frc::JoystickButton(m_XboxCoDriver, 5);
   btnIntakeCargoBall->WhileHeld(new CargoBallIntake);
 
-  btnEjectCargoBall = new frc::JoystickButton(m_XboxDriver, 6);
+  btnEjectCargoBall = new frc::JoystickButton(m_XboxCoDriver, 6);
   btnEjectCargoBall->WhileHeld(new CargoBallEject);
   
 }

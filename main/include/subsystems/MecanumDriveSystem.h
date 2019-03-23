@@ -25,8 +25,8 @@ class MecanumDriveSystem : public frc::Subsystem {
 	//WPI_TalonSRX *rr; // Rear Right motor
 
   // Neo motor controllers
-  rev::CANSparkMax fl{2, rev::CANSparkMax::MotorType::kBrushless};
-  rev::CANSparkMax rl{5, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax fl{5, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax rl{2, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax fr{1, rev::CANSparkMax::MotorType::kBrushless};
   rev::CANSparkMax rr{4, rev::CANSparkMax::MotorType::kBrushless};
 
