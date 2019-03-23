@@ -25,8 +25,11 @@ void GamePieceManipulatorManual::Execute() {
   double velocity;
   
   // Left trigger minus right trigger will provide input to move from range -1 to 1
-//  velocity = oi->m_XboxCoDriver->GetRawAxis(HINGE_LOWER_INPUT_AXIS) - oi->m_XboxCoDriver->GetRawAxis(HINGE_RAISE_INPUT_AXIS); 
-  velocity = oi->m_XboxDriver->GetRawAxis(HINGE_LOWER_INPUT_AXIS) - oi->m_XboxDriver->GetRawAxis(HINGE_RAISE_INPUT_AXIS); 
+  velocity = oi->m_XboxCoDriver->GetRawAxis(HINGE_LOWER_INPUT_AXIS) - oi->m_XboxCoDriver->GetRawAxis(HINGE_RAISE_INPUT_AXIS);
+#define GPM_DEADBAND 0.15
+  if ((velocity < GPM_DEADBAND) && (velocity > -GPM_DEADBAND)) {
+    velocity = oi->m_XboxDriver->GetRawAxis(HINGE_LOWER_INPUT_AXIS) - oi->m_XboxDriver->GetRawAxis(HINGE_RAISE_INPUT_AXIS); 
+  }
 
   gamePieceManipulator->Move(velocity);
   // Display arm/hinge position on the dashboard

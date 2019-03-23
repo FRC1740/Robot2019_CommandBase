@@ -13,7 +13,7 @@
 #define LIFT_MOTOR_L 4
 #define LIFT_MOTOR_R 5
 
-#define UP 0.07
+#define UP 0.2
 #define DOWN -UP
 #define FWD 0.33
 #define REV -FWD
