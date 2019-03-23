@@ -13,10 +13,11 @@
 #define LIFT_MOTOR_L 4
 #define LIFT_MOTOR_R 5
 
-#define UP 0.2
+#define UP 0.5
 #define DOWN -UP
 #define FWD 0.33
 #define REV -FWD
+#define FRONT_RATIO 0.4
 
 HABClimber::HABClimber() : Subsystem("HABClimber") {
   liftMotorF = new WPI_TalonSRX(LIFT_MOTOR_F);
@@ -36,12 +37,12 @@ void HABClimber::InitDefaultCommand() {
 * Lift/Lower/Stop - ALL Motors
 */
 void HABClimber::Lift() {
-  liftMotorF->Set(UP);
+  liftMotorF->Set(UP * FRONT_RATIO);
   liftMotorR->Set(UP);
   liftMotorL->Set(UP);
 }
 void HABClimber::Lower() {
-  liftMotorF->Set(DOWN);
+  liftMotorF->Set(DOWN * FRONT_RATIO);
   liftMotorR->Set(DOWN);
   liftMotorL->Set(DOWN);
 }
@@ -58,10 +59,10 @@ void HABClimber::Stop() {
 * Lift/Lower FRONT Motors
 */
 void HABClimber::LiftFront() {
-    liftMotorF->Set(UP);
+    liftMotorF->Set(UP * FRONT_RATIO);
 }
 void HABClimber::LowerFront(){
-    liftMotorF->Set(DOWN);
+    liftMotorF->Set(DOWN * FRONT_RATIO);
 }
 void HABClimber::StopFront(){
     liftMotorF->Set(0.0);
