@@ -180,10 +180,20 @@ void Robot::AutonomousInit() {
   //   m_autonomousCommand = &m_defaultAuto;
   // }
 
-  m_autonomousCommand = m_chooser.GetSelected();
+  m_autonomousCommand = new MecanumDriveCommand(false); //m_chooser.GetSelected();
 
   if (m_autonomousCommand != nullptr) {
     m_autonomousCommand->Start();
+    #define noUSE_PID
+#ifdef USE_PID
+  m_gamePieceCommand = new GamePieceManipulatorMoveToPosition();
+  //m_gamePieceCommandPID->Start();
+#else // USE_PID
+  m_gamePieceCommand = new GamePieceManipulatorManual();
+#endif // USE_PID
+  m_gamePieceCommand->Start();
+  m_habClimbCommand = new HABLift();
+  m_habClimbCommand->Start();
   }
 }
 
@@ -203,6 +213,7 @@ void Robot::TeleopInit() {
   // This value should come from the sendable chooser/dashboard
   m_teleopCommand = new MecanumDriveCommand(false);
   m_teleopCommand->Start();
+#if 0
 #define noUSE_PID
 #ifdef USE_PID
   m_gamePieceCommand = new GamePieceManipulatorMoveToPosition();
@@ -213,6 +224,7 @@ void Robot::TeleopInit() {
   m_gamePieceCommand->Start();
   m_habClimbCommand = new HABLift();
   m_habClimbCommand->Start();
+#endif
 }
 
 void Robot::TeleopPeriodic() { frc::Scheduler::GetInstance()->Run(); }

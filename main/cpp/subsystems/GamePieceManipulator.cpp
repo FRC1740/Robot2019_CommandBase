@@ -17,15 +17,15 @@
  *  5. Assign A/B/C/D in the section below to actual Left/Right position
  *  6. Test with PID, tune PID constants accordingly
  */
-#define HINGE_A_MAX   0.8
-#define HINGE_A_MIN   4.8
-#define HINGE_A_TOUT  3.0  // Full travel time out under load
-#define HINGE_A_TIN   7.0  // Full travel time in under load
+#define HINGE_A_MAX   0.4
+#define HINGE_A_MIN   4.59
+#define HINGE_A_TOUT  1.0  // Full travel time out under load
+#define HINGE_A_TIN   1.0  // Full travel time in under load
 
-#define HINGE_B_MAX   0.8
-#define HINGE_B_MIN   4.8
-#define HINGE_B_TOUT  4.0
-#define HINGE_B_TIN   6.0
+#define HINGE_B_MAX   0.4
+#define HINGE_B_MIN   4.6
+#define HINGE_B_TOUT  1.0
+#define HINGE_B_TIN   1.0
 
 #define HINGE_C_MAX   0.8
 #define HINGE_C_MIN   4.8
