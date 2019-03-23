@@ -40,7 +40,7 @@ OI::OI() {
   btnSignalLight = new frc::JoystickButton(m_XboxDriver, 2);
   btnSignalLight->WhileHeld(new SignalLight);
 
-  btnGyroReset = new frc::JoystickButton(m_XboxDriver, 9);
+  //btnGyroReset = new frc::JoystickButton(m_XboxDriver, 8);
 
   // Co-Driver Left/Right Bumpers control cargo ball
   btnIntakeCargoBall = new frc::JoystickButton(m_XboxCoDriver, 5);
