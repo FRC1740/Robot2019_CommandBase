@@ -17,7 +17,7 @@
 #define DOWN -UP
 #define FWD 1.0
 #define REV -FWD
-#define FRONT_RATIO 0.4
+#define FRONT_RATIO 1.0
 
 HABClimber::HABClimber() : Subsystem("HABClimber") {
   liftMotorF = new WPI_TalonSRX(LIFT_MOTOR_F);
