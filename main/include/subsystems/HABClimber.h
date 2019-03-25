@@ -37,8 +37,8 @@ class HABClimber : public frc::Subsystem {
   void LowerRear();
   void StopRear();
   /* */
-  void DriveFwd();
-  void DriveRev();
+  void DriveFwd(double v);
+  void DriveRev(double v);
   void DriveStop();
   /* */
   void InitDefaultCommand() override;
