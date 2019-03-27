@@ -23,7 +23,3 @@
 // number and the module. For example you with a rangefinder:
 // constexpr int kRangeFinderPort = 1;
 // constexpr int kRangeFinderModule = 1;
-#define TESTING_DRIVE
-#define TESTING_CLIMB
-#define TESTING_VISION
-#define TESTING_GPM
