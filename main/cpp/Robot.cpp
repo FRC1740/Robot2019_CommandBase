@@ -118,6 +118,7 @@ void Robot::RobotInit() {
   CommandBase::init();
 
 // Launch vision thread
+#ifdef TESTING_VISION
 #ifndef RAW_CAMERA
   std::thread visionThread(VisionThread);
   visionThread.detach();
@@ -129,6 +130,7 @@ void Robot::RobotInit() {
   camera1.SetExposureManual(35);
   camera0.SetExposureManual(35);
 #endif
+#endif // TESTING_VISION
 
   m_chooser.SetDefaultOption("Default Auto", &m_defaultAuto);
   m_chooser.AddOption("My Auto", &m_myAuto);
@@ -191,7 +193,9 @@ void Robot::AutonomousInit() {
   m_autonomousCommand = new MecanumDriveCommand(false); //m_chooser.GetSelected();
 
   if (m_autonomousCommand != nullptr) {
+#ifdef TESTING_DRIVE
     m_autonomousCommand->Start();
+#endif // TESTING_DRIVE
 #if 0
 #define noUSE_PID
 #ifdef USE_PID
@@ -204,8 +208,12 @@ void Robot::AutonomousInit() {
   m_habClimbCommand = new HABLift();
   m_habClimbCommand->Start();
 #else
+#ifdef TESTING_GPM
   m_gamePieceCommand->Start();
+#endif // TESTING_GPM
+#ifdef TESTING_CLIMB
   m_habClimbCommand->Start();
+#endif // TESTING_CLIMB
 #endif
   }
 }
@@ -225,7 +233,9 @@ void Robot::TeleopInit() {
   // FALSE will use Robot-Centric (relative) steering
   // This value should come from the sendable chooser/dashboard
   m_teleopCommand = new MecanumDriveCommand(false);
+#ifdef TESTING_DRIVE
   m_teleopCommand->Start();
+#endif // TESTING_DRIVE
 #if 0
 #define noUSE_PID
 #ifdef USE_PID
@@ -238,8 +248,12 @@ void Robot::TeleopInit() {
   m_habClimbCommand = new HABLift();
   m_habClimbCommand->Start();
 #else
+#ifdef TESTING_GPM
   m_gamePieceCommand->Start();
+#endif // TESTING_GPM
+#ifdef TESTING_CLIMB
   m_habClimbCommand->Start();
+#endif // TESTING_CLIMB
 #endif
 }
 
