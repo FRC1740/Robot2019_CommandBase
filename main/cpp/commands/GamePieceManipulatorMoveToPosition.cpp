@@ -45,7 +45,7 @@ void GamePieceManipulatorMoveToPosition::Execute() {
   // Pulled in from GamePieceManipulatorManual, as the two command objects cannot coexist---------
 #define HINGE_RAISE_INPUT_AXIS  2  // Left Trigger
 #define HINGE_LOWER_INPUT_AXIS  3  // Right Trigger
-#define GP_MANUAL_DEADBAND 0.25
+#define GP_MANUAL_DEADBAND 0.15
 
   double velocity;
   // Left trigger minus right trigger will provide input to move from range -1 to 1
@@ -58,7 +58,7 @@ void GamePieceManipulatorMoveToPosition::Execute() {
     frc::SmartDashboard::PutNumber("Right Hinge", gamePieceManipulator->GetRPosition());
   } // end of copied code ------------------------------------------------------------------------
   else if (oi->m_XboxDriver->GetXButtonPressed()) {
-    newSetpoint = degToLinear(posStow);
+    newSetpoint = degToLinear(posHatchLoad);
   }
   //else if (oi->m_XboxDriver->GetYButtonPressed()) {
   //  newSetpoint = degToLinear(posHatchLoad);

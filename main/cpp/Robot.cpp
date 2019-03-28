@@ -139,7 +139,7 @@ void Robot::RobotInit() {
 
   frc::SmartDashboard::PutNumber("Left Hinge", CommandBase::gamePieceManipulator->GetLPosition());
   frc::SmartDashboard::PutNumber("Right Hinge", CommandBase::gamePieceManipulator->GetRPosition());
-#define no USE_PID
+#define USE_PID
 #ifdef USE_PID
   m_gamePieceCommand = new GamePieceManipulatorMoveToPosition();
 #else // USE_PID

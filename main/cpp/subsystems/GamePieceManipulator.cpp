@@ -109,8 +109,8 @@ GamePieceManipulator::GamePieceManipulator() : frc::Subsystem("GamePieceManipula
     *hingeInL, *hingeOutL);
   hingePIDR = new frc::PIDController(hingeRightKp, hingeRightKi, hingeRightKd,
     *hingeInR, *hingeOutR);
-  frc::SmartDashboard::PutData("Hinge PID Left", hingePIDL);
-  frc::SmartDashboard::PutData("Minge PID Right", hingePIDR);
+  //frc::SmartDashboard::PutData("Hinge PID Left", hingePIDL);
+  //frc::SmartDashboard::PutData("Minge PID Right", hingePIDR);
 
   hingePIDL->SetInputRange(0.0, 1.0);  // position [0,1] (PID) <- [4.7,0.7]
   hingePIDL->SetOutputRange(-1.0, 1.0);  // velocity
