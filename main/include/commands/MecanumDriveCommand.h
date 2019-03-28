@@ -23,6 +23,8 @@ class MecanumDriveCommand : public CommandBase {
   bool IsFinished() override;
   void End() override;
   void Interrupted() override;
+  void ToggleUseGyro();
+  void ToggleDriveSide();
  private:
   double GetX();
   double GetY();
@@ -30,4 +32,5 @@ class MecanumDriveCommand : public CommandBase {
   double GetTwist();
   double Deadband(double); // Also Square inputs
   bool useGyro; // Relative vs. absolute steering using gyro
+  bool driveSideways;
 };

@@ -142,7 +142,6 @@ void Robot::RobotInit() {
 #define noUSE_PID
 #ifdef USE_PID
   m_gamePieceCommand = new GamePieceManipulatorMoveToPosition();
-  //m_gamePieceCommandPID->Start();
 #else // USE_PID
   m_gamePieceCommand = new GamePieceManipulatorManual();
 #endif // USE_PID
@@ -181,7 +180,7 @@ void Robot::DisabledPeriodic() { frc::Scheduler::GetInstance()->Run(); }
  * chooser code above (like the commented example) or additional comparisons to
  * the if-else structure below with additional strings & commands.
  */
-#define USING_GYRO true
+#define USING_GYRO false
 void Robot::AutonomousInit() {
   // std::string autoSelected = frc::SmartDashboard::GetString(
   //     "Auto Selector", "Default");
@@ -196,25 +195,12 @@ void Robot::AutonomousInit() {
 #ifdef TESTING_DRIVE
     m_autonomousCommand->Start();
 #endif // TESTING_DRIVE
-#if 0
-#define noUSE_PID
-#ifdef USE_PID
-  m_gamePieceCommand = new GamePieceManipulatorMoveToPosition();
-  //m_gamePieceCommandPID->Start();
-#else // USE_PID
-  m_gamePieceCommand = new GamePieceManipulatorManual();
-#endif // USE_PID
-  m_gamePieceCommand->Start();
-  m_habClimbCommand = new HABLift();
-  m_habClimbCommand->Start();
-#else
 #ifdef TESTING_GPM
   m_gamePieceCommand->Start();
 #endif // TESTING_GPM
 #ifdef TESTING_CLIMB
   m_habClimbCommand->Start();
 #endif // TESTING_CLIMB
-#endif
   }
 }
 
@@ -237,25 +223,12 @@ void Robot::TeleopInit() {
   m_teleopCommand->Start();
 
 #endif // TESTING_DRIVE
-#if 0
-#define noUSE_PID
-#ifdef USE_PID
-  m_gamePieceCommand = new GamePieceManipulatorMoveToPosition();
-  //m_gamePieceCommandPID->Start();
-#else // USE_PID
-  m_gamePieceCommand = new GamePieceManipulatorManual();
-#endif // USE_PID
-  m_gamePieceCommand->Start();
-  m_habClimbCommand = new HABLift();
-  m_habClimbCommand->Start();
-#else
 #ifdef TESTING_GPM
   m_gamePieceCommand->Start();
 #endif // TESTING_GPM
 #ifdef TESTING_CLIMB
   m_habClimbCommand->Start();
 #endif // TESTING_CLIMB
-#endif
 }
 
 void Robot::TeleopPeriodic() { frc::Scheduler::GetInstance()->Run(); }

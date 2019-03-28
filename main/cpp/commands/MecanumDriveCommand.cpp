@@ -13,6 +13,7 @@ MecanumDriveCommand::MecanumDriveCommand(bool g) {
   // eg. Requires(Robot::chassis.get());
   // Requires mecanumDriveSystem();
   useGyro = g;
+  mecanumDriveSystem->GyroReset();
 }
 
 // Called just before this Command runs the first time
@@ -21,25 +22,42 @@ void MecanumDriveCommand::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void MecanumDriveCommand::Execute() {
     // Check Start button
-  if (oi->m_XboxDriver->GetRawButton(8)) {
+#if 1
+  if (oi->m_XboxDriver->GetStartButton()) {
 		mecanumDriveSystem->GyroReset();
   }
-
-  // TBD: buttons don't work as well as trigger- use that for vision
-  // also, the visionOffset needs a scale and a max limit
+#else
+  if (oi->m_XboxDriver->GetStartButtonPressed()) {
+		ToggleUseGyro();
+  }
+  if (oi->m_XboxDriver->GetBackButtonPressed()) {
+		ToggleDriveSide();
+  }
+#endif
+  // TBD: the visionOffset needs a scale and a max limit
   if (oi->m_XboxDriver->GetAButton()) {
-      CommandBase::visionEnabled = true;
-      mecanumDriveSystem->Go(0, 0.5 * CommandBase::visionOffset, 0);
+    CommandBase::visionEnabled = true;
+    mecanumDriveSystem->Go(0, 0.5 * CommandBase::visionOffset, 0);
   }
   else {
-  CommandBase::visionEnabled = false;
-  CommandBase::visionOffset = 0.0;
-  if (useGyro) {
-    mecanumDriveSystem->Saucer(this->GetX(), this->GetInvertedY(), this->GetTwist());
-  }
-  else {
-    mecanumDriveSystem->Go(this->GetX(), this->GetInvertedY(), this->GetTwist());
-  }
+    CommandBase::visionEnabled = false;
+    CommandBase::visionOffset = 0.0;
+    double x;
+    double y;
+    if (driveSideways) {
+      x = GetInvertedY();
+      y = GetX();
+    }
+    else {
+      x = GetX();
+      y = GetInvertedY();
+    }
+    if (useGyro) {
+      mecanumDriveSystem->Saucer(x, y, this->GetTwist());
+    }
+    else {
+      mecanumDriveSystem->Go(x, y, this->GetTwist());
+    }
   }
 }
 
@@ -75,6 +93,15 @@ double MecanumDriveCommand::GetTwist()
 {
 	return Deadband(oi->m_XboxDriver->GetRawAxis(4)); // Right stick, X axis
 }
+
+void MecanumDriveCommand::ToggleUseGyro() {
+  useGyro = !useGyro;
+}
+
+void MecanumDriveCommand::ToggleDriveSide() {
+  driveSideways = !driveSideways;
+}
+
 double MecanumDriveCommand::Deadband(double val)
 {
   double newVal;
