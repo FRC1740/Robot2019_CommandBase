@@ -33,21 +33,21 @@ void MecanumDriveSystem::InitDefaultCommand() {
 }
 void MecanumDriveSystem::Saucer(double x, double y, double twist) {
   m_robotDrive->DriveCartesian(x, y, twist, -gyro->GetAngle());
-	WriteDashboard();
+	//WriteDashboard();
 }
 void MecanumDriveSystem::Go(double x, double y, double twist) {
   m_robotDrive->DriveCartesian(x, y, twist, 0.0);
-	WriteDashboard();
+	//WriteDashboard();
 }
 void MecanumDriveSystem::Stop() {
   m_robotDrive->DriveCartesian(0.0, 0.0, 0.0, 0.0);
-	WriteDashboard();
+	//WriteDashboard();
 }
 // Put methods for controlling this subsystem
 // here. Call these from Commands.
 void MecanumDriveSystem::GyroReset() {
 	gyro->Reset();
-	WriteDashboard();
+	//WriteDashboard();
 }
 
 void MecanumDriveSystem::WriteDashboard() {
@@ -60,5 +60,4 @@ void MecanumDriveSystem::WriteDashboard() {
   frc::SmartDashboard::PutNumber("RL Pos:", rl_encoder.GetPosition());
   frc::SmartDashboard::PutNumber("FR Pos:", -fr_encoder.GetPosition());
   frc::SmartDashboard::PutNumber("RR Pos:", -rr_encoder.GetPosition());
-
 }

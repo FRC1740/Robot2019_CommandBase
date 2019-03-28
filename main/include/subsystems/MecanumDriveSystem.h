@@ -25,10 +25,10 @@ class MecanumDriveSystem : public frc::Subsystem {
 	//WPI_TalonSRX *rr; // Rear Right motor
 
   // Neo motor controllers
-  rev::CANSparkMax fl{2, rev::CANSparkMax::MotorType::kBrushless}; //was 2
-  rev::CANSparkMax rl{5, rev::CANSparkMax::MotorType::kBrushless}; //was 5
-  rev::CANSparkMax fr{4, rev::CANSparkMax::MotorType::kBrushless}; // should be 4
-  rev::CANSparkMax rr{1, rev::CANSparkMax::MotorType::kBrushless}; // should be 1
+  rev::CANSparkMax fl{2, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax rl{5, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax fr{4, rev::CANSparkMax::MotorType::kBrushless};
+  rev::CANSparkMax rr{1, rev::CANSparkMax::MotorType::kBrushless};
 
   // Drive encoders
   rev::CANEncoder fl_encoder = fl.GetEncoder();
