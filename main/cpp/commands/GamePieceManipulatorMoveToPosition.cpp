@@ -43,8 +43,8 @@ void GamePieceManipulatorMoveToPosition::Execute() {
     return;
   }
   // Pulled in from GamePieceManipulatorManual, as the two command objects cannot coexist---------
-#define HINGE_RAISE_INPUT_AXIS 3  // Right Trigger
-#define HINGE_LOWER_INPUT_AXIS 2  // Left Trigger
+#define HINGE_RAISE_INPUT_AXIS  2  // Left Trigger
+#define HINGE_LOWER_INPUT_AXIS  3  // Right Trigger
 #define GP_MANUAL_DEADBAND 0.25
 
   double velocity;

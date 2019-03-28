@@ -75,6 +75,8 @@ GamePieceManipulator::GamePieceManipulator() : frc::Subsystem("GamePieceManipula
   ballIntakeLimit = new frc::DigitalInput(0);
   // Pneumatic Hatch Panel Eject
   hatchPanel = new frc::DoubleSolenoid(0,1); // PCM Ports
+  // Pneumatic Hatch Panel Intake
+  driveBy = new frc::DoubleSolenoid(2,3); // PCM Ports
   // Cargo Ball Intake/Eject Motor
   ballMotor = new WPI_TalonSRX(1); // CAN ID
   // Hinge Raise/Lower Motor
@@ -133,6 +135,14 @@ void GamePieceManipulator::HatchEject() {
 
 void GamePieceManipulator::HatchInject() {
     hatchPanel->Set(frc::DoubleSolenoid::Value::kReverse);
+  }
+
+void GamePieceManipulator::DriveByActivate() {
+    driveBy->Set(frc::DoubleSolenoid::Value::kForward);
+  }
+
+void GamePieceManipulator::DriveByDeactivate() {
+    driveBy->Set(frc::DoubleSolenoid::Value::kReverse);
   }
 
 /*******************************
