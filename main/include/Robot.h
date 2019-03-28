@@ -65,3 +65,7 @@ class Robot : public frc::TimedRobot {
   MyAutoCommand m_myAuto;
   frc::SendableChooser<frc::Command*> m_chooser;
 };
+#define TESTING_DRIVE   // 50%
+#define TESTING_CLIMB   // <5%
+#define TESTING_VISION  // 40%
+#define TESTING_GPM     // <5%

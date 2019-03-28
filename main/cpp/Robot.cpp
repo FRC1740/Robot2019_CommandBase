@@ -22,7 +22,7 @@
 ExampleSubsystem Robot::m_subsystem;
 //OI Robot::m_oi;
 
-#define no_RAW_CAMERA
+#define RAW_CAMERA
 #ifndef RAW_CAMERA
 
 static void VisionThread()
@@ -118,6 +118,7 @@ void Robot::RobotInit() {
   CommandBase::init();
 
 // Launch vision thread
+#ifdef TESTING_VISION
 #ifndef RAW_CAMERA
   std::thread visionThread(VisionThread);
   visionThread.detach();
@@ -129,6 +130,7 @@ void Robot::RobotInit() {
   camera1.SetExposureManual(35);
   camera0.SetExposureManual(35);
 #endif
+#endif // TESTING_VISION
 
   m_chooser.SetDefaultOption("Default Auto", &m_defaultAuto);
   m_chooser.AddOption("My Auto", &m_myAuto);
@@ -179,6 +181,7 @@ void Robot::DisabledPeriodic() { frc::Scheduler::GetInstance()->Run(); }
  * chooser code above (like the commented example) or additional comparisons to
  * the if-else structure below with additional strings & commands.
  */
+#define USING_GYRO true
 void Robot::AutonomousInit() {
   // std::string autoSelected = frc::SmartDashboard::GetString(
   //     "Auto Selector", "Default");
@@ -188,10 +191,11 @@ void Robot::AutonomousInit() {
   //   m_autonomousCommand = &m_defaultAuto;
   // }
 
-  m_autonomousCommand = new MecanumDriveCommand(false); //m_chooser.GetSelected();
-
+  m_autonomousCommand = new MecanumDriveCommand(USING_GYRO); //m_chooser.GetSelected();
   if (m_autonomousCommand != nullptr) {
+#ifdef TESTING_DRIVE
     m_autonomousCommand->Start();
+#endif // TESTING_DRIVE
 #if 0
 #define noUSE_PID
 #ifdef USE_PID
@@ -204,8 +208,12 @@ void Robot::AutonomousInit() {
   m_habClimbCommand = new HABLift();
   m_habClimbCommand->Start();
 #else
+#ifdef TESTING_GPM
   m_gamePieceCommand->Start();
+#endif // TESTING_GPM
+#ifdef TESTING_CLIMB
   m_habClimbCommand->Start();
+#endif // TESTING_CLIMB
 #endif
   }
 }
@@ -224,8 +232,11 @@ void Robot::TeleopInit() {
   // To use Field-Centric steering (Saucer Mode), pass a TRUE to the command.
   // FALSE will use Robot-Centric (relative) steering
   // This value should come from the sendable chooser/dashboard
-  m_teleopCommand = new MecanumDriveCommand(false);
+  m_teleopCommand = new MecanumDriveCommand(USING_GYRO);
+#ifdef TESTING_DRIVE
   m_teleopCommand->Start();
+
+#endif // TESTING_DRIVE
 #if 0
 #define noUSE_PID
 #ifdef USE_PID
@@ -238,8 +249,12 @@ void Robot::TeleopInit() {
   m_habClimbCommand = new HABLift();
   m_habClimbCommand->Start();
 #else
+#ifdef TESTING_GPM
   m_gamePieceCommand->Start();
+#endif // TESTING_GPM
+#ifdef TESTING_CLIMB
   m_habClimbCommand->Start();
+#endif // TESTING_CLIMB
 #endif
 }
 

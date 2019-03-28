@@ -19,6 +19,13 @@ void MecanumDriveSystem::InitDefaultCommand() {
 	//rr = new WPI_TalonSRX(REAR_RIGHT_MOTOR_ID); // Rear Right
 
 	m_robotDrive = new frc::MecanumDrive(fl, rl, fr, rr);
+
+#define OLRR 0.2
+  fl.SetOpenLoopRampRate(OLRR);
+  rl.SetOpenLoopRampRate(OLRR);
+  fr.SetOpenLoopRampRate(OLRR);
+  rr.SetOpenLoopRampRate(OLRR);
+
 	m_robotDrive->SetExpiration(0.5);
 	m_robotDrive->SetSafetyEnabled(false);
   gyro = new AHRS(SPI::Port::kMXP);
