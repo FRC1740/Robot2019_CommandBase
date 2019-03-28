@@ -19,6 +19,7 @@ void DriveBy::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void DriveBy::Execute() {
     gamePieceManipulator->DriveByActivate();
+    printf("DriveByActivate\n");
 }
 
 // Make this return true when this Command no longer needs to run execute()
@@ -27,10 +28,12 @@ bool DriveBy::IsFinished() { return false; }
 // Called once after isFinished returns true
 void DriveBy::End() {
     gamePieceManipulator->DriveByDeactivate();
+    printf("DriveByDeactivate\n");
 }
 
 // Called when another command which requires one or more of the same
 // subsystems is scheduled to run
 void DriveBy::Interrupted() {
     gamePieceManipulator->DriveByDeactivate();
+    printf("DriveByDeactivate\n");
 }

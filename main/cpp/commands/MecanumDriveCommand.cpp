@@ -22,22 +22,22 @@ void MecanumDriveCommand::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void MecanumDriveCommand::Execute() {
     // Check Start button
-#if 1
+#if 0
   if (oi->m_XboxDriver->GetStartButton()) {
 		mecanumDriveSystem->GyroReset();
   }
 #else
   if (oi->m_XboxDriver->GetStartButtonPressed()) {
-		ToggleUseGyro();
-  }
-  if (oi->m_XboxDriver->GetBackButtonPressed()) {
 		ToggleDriveSide();
   }
+  //if (oi->m_XboxDriver->GetBackButtonPressed()) {
+	//	ToggleUseGyro();
+  //}
 #endif
   // TBD: the visionOffset needs a scale and a max limit
   if (oi->m_XboxDriver->GetAButton()) {
-    CommandBase::visionEnabled = true;
-    mecanumDriveSystem->Go(0, 0.5 * CommandBase::visionOffset, 0);
+    //CommandBase::visionEnabled = true;
+    //mecanumDriveSystem->Go(0, 0.5 * CommandBase::visionOffset, 0);
   }
   else {
     CommandBase::visionEnabled = false;
