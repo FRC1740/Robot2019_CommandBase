@@ -192,7 +192,6 @@ void Robot::AutonomousInit() {
   // }
 
   m_autonomousCommand = new MecanumDriveCommand(USING_GYRO); //m_chooser.GetSelected();
-
   if (m_autonomousCommand != nullptr) {
 #ifdef TESTING_DRIVE
     m_autonomousCommand->Start();
@@ -236,6 +235,7 @@ void Robot::TeleopInit() {
   m_teleopCommand = new MecanumDriveCommand(USING_GYRO);
 #ifdef TESTING_DRIVE
   m_teleopCommand->Start();
+
 #endif // TESTING_DRIVE
 #if 0
 #define noUSE_PID
