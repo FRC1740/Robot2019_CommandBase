@@ -221,6 +221,7 @@ void Robot::TeleopInit() {
   m_teleopCommand = new MecanumDriveCommand(USING_GYRO);
 #ifdef TESTING_DRIVE
   m_teleopCommand->Start();
+
 #endif // TESTING_DRIVE
 #ifdef TESTING_GPM
   m_gamePieceCommand->Start();
