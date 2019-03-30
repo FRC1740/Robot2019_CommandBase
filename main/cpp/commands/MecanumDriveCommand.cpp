@@ -45,7 +45,7 @@ void MecanumDriveCommand::Execute() {
     double x;
     double y;
     if (driveSideways) {
-      x = GetInvertedY();
+      x = GetY();
       y = GetX();
     }
     else {
