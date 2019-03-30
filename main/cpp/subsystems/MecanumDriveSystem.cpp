@@ -19,6 +19,10 @@ void MecanumDriveSystem::InitDefaultCommand() {
 	//rr = new WPI_TalonSRX(REAR_RIGHT_MOTOR_ID); // Rear Right
 
 	m_robotDrive = new frc::MecanumDrive(fl, rl, fr, rr);
+  m_table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+  m_TX = m_table->GetEntry("tx");
+  m_TY = m_table->GetEntry("ty");
+  m_TA = m_table->GetEntry("ta");
 
 #define OLRR 0.2
   fl.SetOpenLoopRampRate(OLRR);

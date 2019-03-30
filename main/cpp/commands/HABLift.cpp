@@ -27,10 +27,12 @@ void HABLift::Execute() {
 #ifdef USE_DPAD
   int dpad = oi->m_XboxDriver->GetPOV();
   if (dpad >= 0) {
+    //down on d-pad (135-225)
     if ((dpad >= 135) && (dpad <= 225)) {
       habClimber->LiftFront();
       habClimber->LiftRear();
     }
+    //up on d-pad (0-90)
     else if ((dpad >= 0) && (dpad <= 90)) {
       habClimber->LowerFront();
     }
