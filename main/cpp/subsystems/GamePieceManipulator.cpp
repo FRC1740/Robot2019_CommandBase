@@ -43,10 +43,10 @@ constexpr double hingeMinLeft   = HINGE_A_MIN;
 constexpr double hingeTinLeft   = HINGE_A_TIN;
 constexpr double hingeToutLeft  = HINGE_A_TOUT;
 
-constexpr double hingeMaxRight  = HINGE_B_MAX;
-constexpr double hingeMinRight  = HINGE_B_MIN;
-constexpr double hingeTinRight  = HINGE_B_TIN;
-constexpr double hingeToutRight = HINGE_B_TOUT;
+constexpr double hingeMaxRight  = HINGE_A_MAX;
+constexpr double hingeMinRight  = HINGE_A_MIN;
+constexpr double hingeTinRight  = HINGE_A_TIN;
+constexpr double hingeToutRight = HINGE_A_TOUT;
 
 // The constants below are calculated, not manually modified ------------------
 constexpr double hingeRangeLeft  = hingeMaxLeft - hingeMinLeft;
