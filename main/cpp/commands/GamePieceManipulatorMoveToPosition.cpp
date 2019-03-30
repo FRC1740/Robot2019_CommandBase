@@ -56,17 +56,18 @@ void GamePieceManipulatorMoveToPosition::Execute() {
     // Display arm/hinge position on the dashboard
     frc::SmartDashboard::PutNumber("Left Hinge", gamePieceManipulator->GetLPosition());
     frc::SmartDashboard::PutNumber("Right Hinge", gamePieceManipulator->GetRPosition());
+    return;
   } // end of copied code ------------------------------------------------------------------------
   else if (oi->m_XboxDriver->GetXButtonPressed()) {
     newSetpoint = degToLinear(posHatchLoad);
   }
-  //else if (oi->m_XboxDriver->GetYButtonPressed()) {
-  //  newSetpoint = degToLinear(posHatchLoad);
-  //}
-  //else if (oi->m_XboxCoDriver->GetXButtonPressed()) {
-  //  newSetpoint = degToLinear(posDeliverRocket);
-  //}
-  else if (oi->m_XboxDriver->GetYButtonPressed()) { // was CoDriver
+  else if (oi->m_XboxDriver->GetYButtonPressed()) {
+    newSetpoint = degToLinear(posGround);
+  }
+  else if (oi->m_XboxCoDriver->GetXButtonPressed()) {
+    newSetpoint = degToLinear(posHatchLoad);
+  }
+  else if (oi->m_XboxCoDriver->GetYButtonPressed()) {
     newSetpoint = degToLinear(posGround);
   }
 
