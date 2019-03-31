@@ -29,7 +29,6 @@ void HABLift::Execute() {
   if (dpad >= 0) {
     //down on d-pad (135-225)
     if ((dpad >= 135) && (dpad <= 225)) {
-      habClimber->LiftFront();
       habClimber->LiftRear();
     }
     //up on d-pad (0-90)
@@ -43,6 +42,10 @@ void HABLift::Execute() {
   }
   if (oi->m_XboxCoDriver->GetBButton()) {
     habClimber->LowerRear();
+  }
+  else if (oi->m_XboxCoDriver->GetAButton()) {
+    habClimber->LiftFront();
+    habClimber->LiftRear();
   }
   else if (dpad < 0) {
     habClimber->StopFront();
