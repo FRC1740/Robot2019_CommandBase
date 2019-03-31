@@ -51,9 +51,11 @@ class MecanumDriveSystem : public frc::Subsystem {
   void GyroReset();
   void WriteDashboard();
 	frc::MecanumDrive *m_robotDrive;
+#ifdef TESTING_LIMELIGHT
   static nt::NetworkTable *m_table;
-  static nt::NetworkTableEntry *m_TX;
-  static nt::NetworkTableEntry *m_TY;
-  static nt::NetworkTableEntry *m_TA;
-  static nt::NetworkTableInstance *m_networkTableInstance;
+  static nt::NetworkTableEntry m_TX;
+  static nt::NetworkTableEntry m_TY;
+  static nt::NetworkTableEntry m_TA;
+  //static nt::NetworkTableInstance m_networkTableInstance;
+#endif
 };
