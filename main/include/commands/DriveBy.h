@@ -10,12 +10,9 @@
 #include <frc/commands/Command.h>
 #include "CommandBase.h"
 
-#define HINGE_RAISE_INPUT_AXIS 2  // Left Trigger
-#define HINGE_LOWER_INPUT_AXIS 3  // Right Trigger
-
-class GamePieceManipulatorManual : public CommandBase {
+class DriveBy : public CommandBase {
  public:
-  GamePieceManipulatorManual();
+  DriveBy();
   void Initialize() override;
   void Execute() override;
   bool IsFinished() override;

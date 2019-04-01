@@ -14,6 +14,7 @@ MecanumDriveCommand::MecanumDriveCommand(bool g) {
   // Requires mecanumDriveSystem();
   useGyro = g;
   mecanumDriveSystem->GyroReset();
+  driveSideways = false;
 }
 
 // Called just before this Command runs the first time
@@ -21,36 +22,38 @@ void MecanumDriveCommand::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void MecanumDriveCommand::Execute() {
+  double speed_ratio = 1.0;
     // Check Start button
-#if 1
+#if 0
   if (oi->m_XboxDriver->GetStartButton()) {
 		mecanumDriveSystem->GyroReset();
   }
 #else
   if (oi->m_XboxDriver->GetStartButtonPressed()) {
-		ToggleUseGyro();
-  }
-  if (oi->m_XboxDriver->GetBackButtonPressed()) {
 		ToggleDriveSide();
   }
+  //if (oi->m_XboxDriver->GetBackButtonPressed()) {
+	//	ToggleUseGyro();
+  //}
 #endif
   // TBD: the visionOffset needs a scale and a max limit
   if (oi->m_XboxDriver->GetAButton()) {
-    CommandBase::visionEnabled = true;
-    mecanumDriveSystem->Go(0, 0.5 * CommandBase::visionOffset, 0);
+    //CommandBase::visionEnabled = true;
+    //mecanumDriveSystem->Go(0, 0.5 * CommandBase::visionOffset, 0);
+    speed_ratio = 0.25;
   }
-  else {
+  {
     CommandBase::visionEnabled = false;
     CommandBase::visionOffset = 0.0;
     double x;
     double y;
     if (driveSideways) {
-      x = GetInvertedY();
-      y = GetX();
+      x = GetY() * speed_ratio;
+      y = GetX() * speed_ratio;
     }
     else {
-      x = GetX();
-      y = GetInvertedY();
+      x = GetX() * speed_ratio;
+      y = GetInvertedY() * speed_ratio;
     }
     if (useGyro) {
       mecanumDriveSystem->Saucer(x, y, this->GetTwist());

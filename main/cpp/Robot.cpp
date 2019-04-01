@@ -125,8 +125,8 @@ void Robot::RobotInit() {
 #else  // RAW_CAMERA
   cs::UsbCamera camera1 = CameraServer::GetInstance()->StartAutomaticCapture(1);
   cs::UsbCamera camera0 = CameraServer::GetInstance()->StartAutomaticCapture(0);
-  camera1.SetResolution(640, 480);
-  camera0.SetResolution(640, 480);
+  camera1.SetResolution(320, 240);
+  camera0.SetResolution(320, 240);
   camera1.SetExposureManual(35);
   camera0.SetExposureManual(35);
 #endif

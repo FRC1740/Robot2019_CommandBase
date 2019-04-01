@@ -12,6 +12,9 @@
 #include <ctre/Phoenix.h> // Required by WPI_TalonSRX class
 #include <rev/CANSparkMax.h>
 #include <AHRS.h>
+#include <networktables/NetworkTable.h>
+#include <networktables/NetworkTableInstance.h>
+#include <networktables/NetworkTableEntry.h>
 
 class MecanumDriveSystem : public frc::Subsystem {
  private:
@@ -48,4 +51,11 @@ class MecanumDriveSystem : public frc::Subsystem {
   void GyroReset();
   void WriteDashboard();
 	frc::MecanumDrive *m_robotDrive;
+#ifdef TESTING_LIMELIGHT
+  static nt::NetworkTable *m_table;
+  static nt::NetworkTableEntry m_TX;
+  static nt::NetworkTableEntry m_TY;
+  static nt::NetworkTableEntry m_TA;
+  //static nt::NetworkTableInstance m_networkTableInstance;
+#endif
 };

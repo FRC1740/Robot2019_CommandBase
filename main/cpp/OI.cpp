@@ -8,6 +8,7 @@
 #include <frc/WPILib.h>
 #include "OI.h"
 #include "commands/HatchPanelEject.h"
+#include "commands/DriveBy.h"
 #include "commands/SignalLight.h"
 #include "commands/CargoBallEject.h"
 #include "commands/CargoBallIntake.h"
@@ -32,9 +33,13 @@ OI::OI() {
   m_XboxDriver = new frc::XboxController(0); // Driver in USB slot zero
   m_XboxCoDriver = new frc::XboxController(1); // Driver in USB slot one
 
-  // A button: Pneumatic Panel Eject
+  // Pneumatic Panel Hatch
   btnEjectHatchPanel = new frc::JoystickButton(m_XboxDriver, 6);
   btnEjectHatchPanel->WhileHeld(new HatchPanelEject);
+
+  // Pneumatic Panel DriveBy
+  btnDriveBy = new frc::JoystickButton(m_XboxDriver, 5);
+  btnDriveBy->WhileHeld(new DriveBy);
 
   // B button: Signal light to indicate Cargo/Hatch Panel
   btnSignalLight = new frc::JoystickButton(m_XboxDriver, 2);
@@ -43,7 +48,7 @@ OI::OI() {
   //btnGyroReset = new frc::JoystickButton(m_XboxDriver, 8);
 
   // Co-Driver Left/Right Bumpers control cargo ball
-  btnIntakeCargoBall = new frc::JoystickButton(m_XboxCoDriver, 5);
+  btnIntakeCargoBall = new frc::JoystickButton(m_XboxCoDriver, 5); // L=5,R=6
   btnIntakeCargoBall->WhileHeld(new CargoBallIntake);
 
   btnEjectCargoBall = new frc::JoystickButton(m_XboxCoDriver, 6);
