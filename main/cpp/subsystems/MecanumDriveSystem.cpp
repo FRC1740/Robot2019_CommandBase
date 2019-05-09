@@ -26,6 +26,7 @@ void MecanumDriveSystem::InitDefaultCommand() {
   m_TA = m_table.GetEntry("ta");
 #endif // TESTING_LIMELIGHT
 #define OLRR 0.2
+
   fl.SetOpenLoopRampRate(OLRR);
   rl.SetOpenLoopRampRate(OLRR);
   fr.SetOpenLoopRampRate(OLRR);

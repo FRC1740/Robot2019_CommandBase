@@ -221,19 +221,9 @@ void Robot::TeleopInit() {
   m_teleopCommand = new MecanumDriveCommand(USING_GYRO);
 #ifdef TESTING_DRIVE
   m_teleopCommand->Start();
-<<<<<<< HEAD
-#define nonUSE_PID
-#ifdef USE_PID
-  m_gamePieceCommand = new GamePieceManipulatorMoveToPosition();
-  //m_gamePieceCommandPID->Start();
-#else // USE_PID
-  m_gamePieceCommand = new GamePieceManipulatorManual();
-#endif // USE_PID
-=======
 
 #endif // TESTING_DRIVE
 #ifdef TESTING_GPM
->>>>>>> upstream/master
   m_gamePieceCommand->Start();
 #endif // TESTING_GPM
 #ifdef TESTING_CLIMB

@@ -16,14 +16,14 @@
 /* ****
  *
  * 	xBox Controller button mapping:
- * 	Button 1 - A - 
- * 	Button 2 - B - 
- * 	Button 3 - X - 
- * 	Button 4 - Y - 
- * 	Button 5 - Left Bumper - 
- * 	Button 6 - Right Bumper - 
- * 	Button 7 - Back - 
- * 	Button 8 - Start - 
+ * 	Button 1 - A -
+ * 	Button 2 - B -
+ * 	Button 3 - X -
+ * 	Button 4 - Y -
+ * 	Button 5 - Left Bumper -
+ * 	Button 6 - Right Bumper -
+ * 	Button 7 - Back -
+ * 	Button 8 - Start -
  * 	Button 9 - Left Stick
  * 	Button 10 - Right Stick
  */
@@ -34,11 +34,15 @@ OI::OI() {
   m_XboxCoDriver = new frc::XboxController(1); // Driver in USB slot one
 
   // Pneumatic Panel Hatch
-  btnEjectHatchPanel = new frc::JoystickButton(m_XboxDriver, 6);
+  //btnEjectHatchPanel = new frc::JoystickButton(m_XboxDriver, 6);
+  // Reassigning hatch ops to codriver for state championships
+  btnEjectHatchPanel = new frc::JoystickButton(m_XboxCoDriver, 6);
   btnEjectHatchPanel->WhileHeld(new HatchPanelEject);
 
   // Pneumatic Panel DriveBy
-  btnDriveBy = new frc::JoystickButton(m_XboxDriver, 5);
+  //btnDriveBy = new frc::JoystickButton(m_XboxDriver, 5);
+  // Reassigning hatch ops to codriver for state championships
+  btnDriveBy = new frc::JoystickButton(m_XboxCoDriver, 5);
   btnDriveBy->WhileHeld(new DriveBy);
 
   // B button: Signal light to indicate Cargo/Hatch Panel
@@ -48,10 +52,10 @@ OI::OI() {
   //btnGyroReset = new frc::JoystickButton(m_XboxDriver, 8);
 
   // Co-Driver Left/Right Bumpers control cargo ball
-  btnIntakeCargoBall = new frc::JoystickButton(m_XboxCoDriver, 5); // L=5,R=6
-  btnIntakeCargoBall->WhileHeld(new CargoBallIntake);
+  // btnIntakeCargoBall = new frc::JoystickButton(m_XboxCoDriver, 5); // L=5,R=6
+  // btnIntakeCargoBall->WhileHeld(new CargoBallIntake);
 
-  btnEjectCargoBall = new frc::JoystickButton(m_XboxCoDriver, 6);
-  btnEjectCargoBall->WhileHeld(new CargoBallEject);
-  
+  // btnEjectCargoBall = new frc::JoystickButton(m_XboxCoDriver, 6);
+  //  btnEjectCargoBall->WhileHeld(new CargoBallEject);
+
 }

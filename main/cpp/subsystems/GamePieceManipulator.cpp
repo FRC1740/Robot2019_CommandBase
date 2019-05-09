@@ -17,15 +17,6 @@
  *  5. Assign A/B/C/D in the section below to actual Left/Right position
  *  6. Test with PID, tune PID constants accordingly
  */
-<<<<<<< HEAD
-#define HINGE_A_MAX   0.8  // .398 Measured Hard Limit of Actuator
-#define HINGE_A_MIN   4.8  // 4.352 Measured Hard Limit of Actuator
-#define HINGE_A_TOUT  1.0  // Full travel time out under load
-#define HINGE_A_TIN   1.0  // Full travel time in under load
-
-#define HINGE_B_MAX   0.25  // .25tg2 Measured limit 6 3/4 in.
-#define HINGE_B_MIN   4.78  // 4.78 Measured limit 5/8 in.
-=======
 #define HINGE_A_MAX   0.552
 #define HINGE_A_MIN   4.432
 #define HINGE_A_TOUT  1.0  // Full travel time out under load
@@ -33,7 +24,6 @@
 
 #define HINGE_B_MAX   0.455
 #define HINGE_B_MIN   4.273
->>>>>>> upstream/master
 #define HINGE_B_TOUT  1.0
 #define HINGE_B_TIN   1.0
 

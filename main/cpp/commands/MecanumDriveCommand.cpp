@@ -28,16 +28,6 @@ void MecanumDriveCommand::Execute() {
   if (oi->m_XboxDriver->GetStartButton()) {
 		mecanumDriveSystem->GyroReset();
   }
-<<<<<<< HEAD
-  else {
-  CommandBase::visionEnabled = false;
-  CommandBase::visionOffset = 0.0;
-    if (useGyro) {
-      mecanumDriveSystem->Saucer(this->GetX(), this->GetInvertedY(), this->GetTwist());
-    }
-    else {
-      mecanumDriveSystem->Go(this->GetX(), this->GetInvertedY(), this->GetTwist());
-=======
 #else
   if (oi->m_XboxDriver->GetStartButtonPressed()) {
 		ToggleDriveSide();
@@ -70,7 +60,6 @@ void MecanumDriveCommand::Execute() {
     }
     else {
       mecanumDriveSystem->Go(x, y, this->GetTwist());
->>>>>>> upstream/master
     }
   }
 }
