@@ -69,7 +69,7 @@ bool MecanumDriveCommand::IsFinished() { return false; }
 
 // Called once after isFinished returns true
 void MecanumDriveCommand::End() {
-  mecanumDriveSystem->Stop();  
+  mecanumDriveSystem->Stop();
 }
 
 // Called when another command which requires one or more of the same
@@ -113,7 +113,7 @@ double MecanumDriveCommand::Deadband(double val)
   }
   if (val != 0) {
    newVal = pow(val, 2);
-  } 
+  }
   if (val >= 0) {
     return newVal;
   }

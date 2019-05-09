@@ -49,8 +49,8 @@ constexpr double hingeTinRight  = HINGE_A_TIN;
 constexpr double hingeToutRight = HINGE_A_TOUT;
 
 // The constants below are calculated, not manually modified ------------------
-constexpr double hingeRangeLeft  = hingeMaxLeft - hingeMinLeft;
-constexpr double hingeRangeRight = hingeMaxRight - hingeMinRight;
+constexpr double hingeRangeLeft  = hingeMaxLeft - hingeMinLeft; // NEGATIVE VALUE !! (MIN>MAX)
+constexpr double hingeRangeRight = hingeMaxRight - hingeMinRight; // NEGATIVE VALUE !! (MIN>MAX)
 
 #define HMAX(a,b) ((a)<(b)?(b):(a))  // Roll our own
 constexpr double hingeTinMax = HMAX(hingeTinLeft, hingeTinRight);

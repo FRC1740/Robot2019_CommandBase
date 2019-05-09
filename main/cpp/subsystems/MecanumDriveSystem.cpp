@@ -26,6 +26,7 @@ void MecanumDriveSystem::InitDefaultCommand() {
   m_TA = m_table.GetEntry("ta");
 #endif // TESTING_LIMELIGHT
 #define OLRR 0.2
+
   fl.SetOpenLoopRampRate(OLRR);
   rl.SetOpenLoopRampRate(OLRR);
   fr.SetOpenLoopRampRate(OLRR);
@@ -37,10 +38,12 @@ void MecanumDriveSystem::InitDefaultCommand() {
 
 }
 void MecanumDriveSystem::Saucer(double x, double y, double twist) {
+//  m_robotDrive->DriveCartesian(0, 0, 0, 0); // Safety Disable Drive
   m_robotDrive->DriveCartesian(x, y, twist, -gyro->GetAngle());
 	//WriteDashboard();
 }
 void MecanumDriveSystem::Go(double x, double y, double twist) {
+//  m_robotDrive->DriveCartesian(0, 0, 0, 0); // Safety Disable Drive
   m_robotDrive->DriveCartesian(x, y, twist, 0.0);
 	//WriteDashboard();
 }
