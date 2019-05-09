@@ -59,9 +59,12 @@ class Robot : public frc::TimedRobot {
   frc::Command* m_autonomousCommand = nullptr;
 	frc::Command *m_teleopCommand = nullptr;
   frc::Command *m_gamePieceCommand = nullptr;
-  frc::Command *m_gamePieceCommandPID = nullptr;
   frc::Command *m_habClimbCommand = nullptr;
   ExampleCommand m_defaultAuto;
   MyAutoCommand m_myAuto;
   frc::SendableChooser<frc::Command*> m_chooser;
 };
+#define TESTING_DRIVE   // 50%
+#define TESTING_CLIMB   // <5%
+#define TESTING_VISION  // 40%
+#define TESTING_GPM     // <5%

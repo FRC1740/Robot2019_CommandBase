@@ -19,6 +19,18 @@ void MecanumDriveSystem::InitDefaultCommand() {
 	//rr = new WPI_TalonSRX(REAR_RIGHT_MOTOR_ID); // Rear Right
 
 	m_robotDrive = new frc::MecanumDrive(fl, rl, fr, rr);
+#ifdef TESTING_LIMELIGHT
+  m_table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+  m_TX = m_table.GetEntry("tx");
+  m_TY = m_table.GetEntry("ty");
+  m_TA = m_table.GetEntry("ta");
+#endif // TESTING_LIMELIGHT
+#define OLRR 0.2
+  fl.SetOpenLoopRampRate(OLRR);
+  rl.SetOpenLoopRampRate(OLRR);
+  fr.SetOpenLoopRampRate(OLRR);
+  rr.SetOpenLoopRampRate(OLRR);
+
 	m_robotDrive->SetExpiration(0.5);
 	m_robotDrive->SetSafetyEnabled(false);
   gyro = new AHRS(SPI::Port::kMXP);
@@ -27,22 +39,22 @@ void MecanumDriveSystem::InitDefaultCommand() {
 void MecanumDriveSystem::Saucer(double x, double y, double twist) {
 //  m_robotDrive->DriveCartesian(0, 0, 0, 0); // Safety Disable Drive
   m_robotDrive->DriveCartesian(x, y, twist, -gyro->GetAngle());
-	WriteDashboard();
+	//WriteDashboard();
 }
 void MecanumDriveSystem::Go(double x, double y, double twist) {
 //  m_robotDrive->DriveCartesian(0, 0, 0, 0); // Safety Disable Drive
   m_robotDrive->DriveCartesian(x, y, twist, 0.0);
-	WriteDashboard();
+	//WriteDashboard();
 }
 void MecanumDriveSystem::Stop() {
   m_robotDrive->DriveCartesian(0.0, 0.0, 0.0, 0.0);
-	WriteDashboard();
+	//WriteDashboard();
 }
 // Put methods for controlling this subsystem
 // here. Call these from Commands.
 void MecanumDriveSystem::GyroReset() {
 	gyro->Reset();
-	WriteDashboard();
+	//WriteDashboard();
 }
 
 void MecanumDriveSystem::WriteDashboard() {
@@ -55,5 +67,4 @@ void MecanumDriveSystem::WriteDashboard() {
   frc::SmartDashboard::PutNumber("RL Pos:", rl_encoder.GetPosition());
   frc::SmartDashboard::PutNumber("FR Pos:", -fr_encoder.GetPosition());
   frc::SmartDashboard::PutNumber("RR Pos:", -rr_encoder.GetPosition());
-
 }

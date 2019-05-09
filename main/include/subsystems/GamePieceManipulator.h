@@ -29,6 +29,9 @@ class GamePieceManipulator : public frc::Subsystem {
   // Pneumatic Hatch Panel Eject
   frc::DoubleSolenoid *hatchPanel;
 
+  // Pneumatic Hatch Panel Intake
+  frc::DoubleSolenoid *driveBy;
+
   // Cargo Ball Intake/Eject Motor
   WPI_TalonSRX *ballMotor;
 
@@ -51,6 +54,8 @@ class GamePieceManipulator : public frc::Subsystem {
   void InitDefaultCommand() override;
   void HatchEject();
   void HatchInject();
+  void DriveByActivate();
+  void DriveByDeactivate();
   void Move(double); // manual arm raise/lower
   void MoveTo(double); // move to position arm raise/lower
   void EnablePIDLoop();

@@ -15,6 +15,7 @@ class OI {
   frc::XboxController *m_XboxDriver;
   frc::XboxController *m_XboxCoDriver;
   frc::JoystickButton *btnEjectHatchPanel;
+  frc::JoystickButton *btnDriveBy;
   frc::JoystickButton *btnIntakeCargoBall;
   frc::JoystickButton *btnEjectCargoBall;
   frc::JoystickButton *btnHABLift;

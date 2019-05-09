@@ -13,6 +13,8 @@ MecanumDriveCommand::MecanumDriveCommand(bool g) {
   // eg. Requires(Robot::chassis.get());
   // Requires mecanumDriveSystem();
   useGyro = g;
+  mecanumDriveSystem->GyroReset();
+  driveSideways = false;
 }
 
 // Called just before this Command runs the first time
@@ -20,12 +22,13 @@ void MecanumDriveCommand::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void MecanumDriveCommand::Execute() {
-  // TBD: buttons don't work as well as trigger- use that for vision
-  // also, the visionOffset needs a scale and a max limit
-  if (oi->m_XboxDriver->GetYButton()) { //GetRawAxis(2) > 0.5)
-      CommandBase::visionEnabled = true;
-      mecanumDriveSystem->Go(0, 0.5 * CommandBase::visionOffset, 0);
+  double speed_ratio = 1.0;
+    // Check Start button
+#if 0
+  if (oi->m_XboxDriver->GetStartButton()) {
+		mecanumDriveSystem->GyroReset();
   }
+<<<<<<< HEAD
   else {
   CommandBase::visionEnabled = false;
   CommandBase::visionOffset = 0.0;
@@ -34,6 +37,40 @@ void MecanumDriveCommand::Execute() {
     }
     else {
       mecanumDriveSystem->Go(this->GetX(), this->GetInvertedY(), this->GetTwist());
+=======
+#else
+  if (oi->m_XboxDriver->GetStartButtonPressed()) {
+		ToggleDriveSide();
+  }
+  //if (oi->m_XboxDriver->GetBackButtonPressed()) {
+	//	ToggleUseGyro();
+  //}
+#endif
+  // TBD: the visionOffset needs a scale and a max limit
+  if (oi->m_XboxDriver->GetAButton()) {
+    //CommandBase::visionEnabled = true;
+    //mecanumDriveSystem->Go(0, 0.5 * CommandBase::visionOffset, 0);
+    speed_ratio = 0.25;
+  }
+  {
+    CommandBase::visionEnabled = false;
+    CommandBase::visionOffset = 0.0;
+    double x;
+    double y;
+    if (driveSideways) {
+      x = GetY() * speed_ratio;
+      y = GetX() * speed_ratio;
+    }
+    else {
+      x = GetX() * speed_ratio;
+      y = GetInvertedY() * speed_ratio;
+    }
+    if (useGyro) {
+      mecanumDriveSystem->Saucer(x, y, this->GetTwist());
+    }
+    else {
+      mecanumDriveSystem->Go(x, y, this->GetTwist());
+>>>>>>> upstream/master
     }
   }
 }
@@ -70,6 +107,15 @@ double MecanumDriveCommand::GetTwist()
 {
 	return Deadband(oi->m_XboxDriver->GetRawAxis(4)); // Right stick, X axis
 }
+
+void MecanumDriveCommand::ToggleUseGyro() {
+  useGyro = !useGyro;
+}
+
+void MecanumDriveCommand::ToggleDriveSide() {
+  driveSideways = !driveSideways;
+}
+
 double MecanumDriveCommand::Deadband(double val)
 {
   double newVal;

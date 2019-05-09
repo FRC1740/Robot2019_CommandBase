@@ -17,6 +17,7 @@
  *  5. Assign A/B/C/D in the section below to actual Left/Right position
  *  6. Test with PID, tune PID constants accordingly
  */
+<<<<<<< HEAD
 #define HINGE_A_MAX   0.8  // .398 Measured Hard Limit of Actuator
 #define HINGE_A_MIN   4.8  // 4.352 Measured Hard Limit of Actuator
 #define HINGE_A_TOUT  1.0  // Full travel time out under load
@@ -24,6 +25,15 @@
 
 #define HINGE_B_MAX   0.25  // .25tg2 Measured limit 6 3/4 in.
 #define HINGE_B_MIN   4.78  // 4.78 Measured limit 5/8 in.
+=======
+#define HINGE_A_MAX   0.552
+#define HINGE_A_MIN   4.432
+#define HINGE_A_TOUT  1.0  // Full travel time out under load
+#define HINGE_A_TIN   1.0  // Full travel time in under load
+
+#define HINGE_B_MAX   0.455
+#define HINGE_B_MIN   4.273
+>>>>>>> upstream/master
 #define HINGE_B_TOUT  1.0
 #define HINGE_B_TIN   1.0
 
@@ -43,10 +53,10 @@ constexpr double hingeMinLeft   = HINGE_A_MIN;
 constexpr double hingeTinLeft   = HINGE_A_TIN;
 constexpr double hingeToutLeft  = HINGE_A_TOUT;
 
-constexpr double hingeMaxRight  = HINGE_B_MAX;
-constexpr double hingeMinRight  = HINGE_B_MIN;
-constexpr double hingeTinRight  = HINGE_B_TIN;
-constexpr double hingeToutRight = HINGE_B_TOUT;
+constexpr double hingeMaxRight  = HINGE_A_MAX;
+constexpr double hingeMinRight  = HINGE_A_MIN;
+constexpr double hingeTinRight  = HINGE_A_TIN;
+constexpr double hingeToutRight = HINGE_A_TOUT;
 
 // The constants below are calculated, not manually modified ------------------
 constexpr double hingeRangeLeft  = hingeMaxLeft - hingeMinLeft; // NEGATIVE VALUE !! (MIN>MAX)
@@ -75,6 +85,8 @@ GamePieceManipulator::GamePieceManipulator() : frc::Subsystem("GamePieceManipula
   ballIntakeLimit = new frc::DigitalInput(0);
   // Pneumatic Hatch Panel Eject
   hatchPanel = new frc::DoubleSolenoid(0,1); // PCM Ports
+  // Pneumatic Hatch Panel Intake
+  driveBy = new frc::DoubleSolenoid(2,3); // PCM Ports
   // Cargo Ball Intake/Eject Motor
   ballMotor = new WPI_TalonSRX(1); // CAN ID
   // Hinge Raise/Lower Motor
@@ -107,8 +119,8 @@ GamePieceManipulator::GamePieceManipulator() : frc::Subsystem("GamePieceManipula
     *hingeInL, *hingeOutL);
   hingePIDR = new frc::PIDController(hingeRightKp, hingeRightKi, hingeRightKd,
     *hingeInR, *hingeOutR);
-  frc::SmartDashboard::PutData("Hinge PID Left", hingePIDL);
-  frc::SmartDashboard::PutData("Minge PID Right", hingePIDR);
+  //frc::SmartDashboard::PutData("Hinge PID Left", hingePIDL);
+  //frc::SmartDashboard::PutData("Minge PID Right", hingePIDR);
 
   hingePIDL->SetInputRange(0.0, 1.0);  // position [0,1] (PID) <- [4.7,0.7]
   hingePIDL->SetOutputRange(-1.0, 1.0);  // velocity
@@ -135,13 +147,21 @@ void GamePieceManipulator::HatchInject() {
     hatchPanel->Set(frc::DoubleSolenoid::Value::kReverse);
   }
 
+void GamePieceManipulator::DriveByActivate() {
+    driveBy->Set(frc::DoubleSolenoid::Value::kForward);
+  }
+
+void GamePieceManipulator::DriveByDeactivate() {
+    driveBy->Set(frc::DoubleSolenoid::Value::kReverse);
+  }
+
 /*******************************
     Arm Raise & Lower Methods
 ********************************/
 //v = velocity
 #define GP_DEADBAND 0.25
 void GamePieceManipulator::Move(double v) {
-
+  DisablePIDLoop();  // Added this when combining ManualMove and MoveTo command objects
     double positionL = hingePotL->GetVoltage();
     // Scale positionL to [0, 1]
     positionL = (positionL - hingeMinLeft) / hingeRangeLeft;
